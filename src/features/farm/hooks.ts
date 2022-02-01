@@ -1,3 +1,4 @@
+import React, { ReactElement, ReactNode, useContext } from 'react'
 import {
   ChainId,
   CurrencyAmount,
@@ -17,6 +18,8 @@ import { Zero } from '@ethersproject/constants'
 import concat from 'lodash/concat'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import zip from 'lodash/zip'
+import { useUiPoolDataProvider } from '../../hooks'
+import { ethers, BigNumber } from 'ethers'
 
 export function useChefContract(chef: Chef) {
   const masterChefContract = useMasterChefContract()
@@ -185,4 +188,219 @@ export function useInfiniteScroll(items): [number, Dispatch<number>] {
   const [itemsDisplayed, setItemsDisplayed] = useState(10)
   useEffect(() => setItemsDisplayed(10), [items.length])
   return [itemsDisplayed, setItemsDisplayed]
+}
+
+function formatObjectWithBNFields(obj: object): any {
+  return Object.keys(obj).reduce((acc, key) => {
+    if (isNaN(Number(key))) {
+      // @ts-ignore
+      let value = obj[key]
+      if (value._isBigNumber) {
+        value = value.toString()
+      }
+      acc[key] = value
+    }
+    return acc
+  }, {} as any)
+}
+
+/**
+ * removes the marketPrefix from a symbol
+ * @param symbol
+ * @param prefix
+ */
+export const unPrefixSymbol = (symbol: string, prefix: string) => {
+  return symbol.toUpperCase().replace(new RegExp(`^(${prefix[0]}?${prefix.slice(1)})`), '')
+}
+
+type ReserveData = {
+  id: string
+  underlyingAsset: string
+  name: string
+  symbol: string
+  decimals: number
+  isActive: boolean
+  isFrozen: boolean
+  aTokenAddress: string
+  pTokenAddress: string
+  stableDebtTokenAddress: string
+  borrowingEnabled: boolean
+  depositsEnabled: boolean
+  withdrawalsEnabled: boolean
+  interestWithdrawalsEnabled: boolean
+  stableBorrowRateEnabled: boolean
+  averageStableRate: string
+  stableDebtLastUpdateTimestamp: number
+  baseVariableBorrowRate: string
+  liquidityIndex: string
+  avg30DaysVariableBorrowRate?: string
+  availableLiquidity: string
+  stableBorrowRate: string
+  liquidityRate: string
+  avg30DaysLiquidityRate?: string
+  totalPrincipalStableDebt: string
+  totalScaledVariableDebt: string
+  lastUpdateTimestamp: number
+}
+
+type UserReserveData = {
+  scaledATokenBalance: string
+  usageAsCollateralEnabledOnUser: boolean
+  scaledVariableDebt: string
+  variableBorrowIndex: string
+  aTokenBalance: string
+  pTokenBalance: string
+  scaledPTokenBalance: string
+  stableBorrowRate: string
+  principalStableDebt: string
+  stableBorrowLastUpdateTimestamp: number
+  reserve: {
+    id: string
+    underlyingAsset: string
+    project: string
+    name: string
+    symbol: string
+    decimals: number
+    liquidityRate: BigNumber
+    reserveLiquidationBonus: string
+    lastUpdateTimestamp: number
+    aTokenAddress: string
+    pTokenAddress: string
+    withdrawalsEnabled: boolean
+    interestWithdrawalsEnabled: boolean
+    depositsEnabled: boolean
+  }
+}
+
+export interface PoolDataContextData {
+  loading?: boolean
+  isUserHasDeposits?: boolean
+  reserves: ReserveData[]
+  user?: UserReserveData[]
+}
+
+export interface StaticPoolDataContextData {
+  rawReserves: ReserveData[]
+  isUserHasDeposits: boolean
+  rawUserReserves?: UserReserveData[]
+}
+
+export function useProtocolDataWithRpc(): PoolDataContextData {
+  const { account } = useActiveWeb3React()
+  const currentAccount = account ? account.toLowerCase() : ethers.constants.AddressZero
+  const poolDataProviderContract = useUiPoolDataProvider()
+  const addressessProvider = '0x5108ee914a3cBaBAE2258B3dE9dE053DCc869BAa'
+
+  const reservesData = useSingleContractMultipleData(
+    poolDataProviderContract,
+    'getReservesData',
+    [[addressessProvider]],
+    undefined,
+    100_000
+  )
+
+  const userReserves = useSingleContractMultipleData(
+    poolDataProviderContract,
+    'getUserReservesData',
+    [[addressessProvider, currentAccount]],
+    undefined,
+    100_000
+  )
+
+  const reservesDataLoading: boolean = useMemo(
+    () => reservesData.some((callState) => callState.loading),
+    [reservesData]
+  )
+  const userReservesDataLoading: boolean = useMemo(
+    () => userReserves.some((callState) => callState.loading),
+    [userReserves]
+  )
+  const loading = !reservesDataLoading && !userReservesDataLoading ? false : true
+  // console.log(reservesDataLoading)
+  // console.log(userReservesDataLoading)
+  // console.log(loading)
+  const rawReservesData = reservesData?.[0]?.result?.[0]
+
+  const formattedReservesData = rawReservesData?.map((rawReserve) => {
+    const formattedReserve = formatObjectWithBNFields(rawReserve)
+    formattedReserve.symbol = rawReserve.symbol.toUpperCase()
+    formattedReserve.id = (rawReserve.project + rawReserve.underlyingAsset).toLowerCase()
+    formattedReserve.underlyingAsset = rawReserve.underlyingAsset.toLowerCase()
+    formattedReserve.project = rawReserve.project.toLowerCase()
+    return formattedReserve
+  })
+  // console.log(formattedReservesData);
+  const rawUserReserveData = userReserves?.[0]?.result?.[0]
+  // console.log(rawUserReserveData);
+  const formattedUserReserves = rawUserReserveData?.map((rawUserReserve) => {
+    const reserve = formattedReservesData.find((resp) => resp.project === rawUserReserve.project.toLowerCase())
+
+    const formattedUserReserve = formatObjectWithBNFields(rawUserReserve)
+    formattedUserReserve.id = (currentAccount + reserve.id).toLowerCase()
+
+    formattedUserReserve.reserve = {
+      id: reserve.id,
+      underlyingAsset: reserve.underlyingAsset,
+      name: reserve.name,
+      symbol: reserve.symbol,
+      decimals: reserve.decimals,
+      liquidityRate: BigNumber.from(reserve.liquidityRate),
+      reserveLiquidationBonus: reserve.reserveLiquidationBonus,
+      lastUpdateTimestamp: reserve.lastUpdateTimestamp,
+      aTokenAddress: reserve.aTokenAddress,
+      pTokenAddress: reserve.pTokenAddress,
+      withdrawalsEnabled: reserve.withdrawalsEnabled,
+      interestWithdrawalsEnabled: reserve.interestWithdrawalsEnabled,
+      depositsEnabled: reserve.depositsEnabled,
+    }
+    return formattedUserReserve
+  })
+  // console.log(formattedUserReserves);
+  const poolData = {
+    reserves: formattedReservesData,
+    userReserves: currentAccount !== ethers.constants.AddressZero ? formattedUserReserves : [],
+  }
+
+  // console.log(poolData);
+  if (!loading) {
+    const reserves = poolData?.reserves.map((reserve) => ({
+      ...reserve,
+      symbol: unPrefixSymbol(reserve.symbol, 'A'),
+    }))
+    // console.log(reserves);
+
+    const userReservesData = poolData?.userReserves?.map((userReserve) => ({
+      ...userReserve,
+      reserve: {
+        ...userReserve.reserve,
+        symbol: unPrefixSymbol(userReserve.reserve.symbol, 'A'),
+      },
+    }))
+    // console.log(userReservesData);
+    const isUserHasDeposits = userReservesData?.some((userReserve) => userReserve.scaledATokenBalance !== '0')
+    // console.log(isUserHasDeposits);
+    const reservesWithFixedUnderlying = reserves.map((reserve) => {
+      return reserve
+    })
+    // console.log(reservesWithFixedUnderlying);
+    const userReservesWithFixedUnderlying = userReservesData?.map((userReserve) => {
+      return userReserve
+    })
+    // console.log(userReservesWithFixedUnderlying);
+    const poolDataContext = {
+      loading,
+      isUserHasDeposits,
+      reserves: reservesWithFixedUnderlying,
+      user: userReservesWithFixedUnderlying,
+    }
+
+    return poolDataContext
+  }
+
+  return {
+    loading,
+    isUserHasDeposits: false,
+    reserves: undefined,
+    user: undefined,
+  }
 }

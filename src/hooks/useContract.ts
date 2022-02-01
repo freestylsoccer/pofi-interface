@@ -69,6 +69,10 @@ import { getContract } from '../functions/contract'
 import { getVerifyingContract } from 'limitorderv2-sdk'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useMemo } from 'react'
+import PROTOCOL_DATA_PROVIDER_ABI from '../constants/abis/ProtocolDataProvider.json'
+import { LENDING_POOL_ADDRESS, PROTOCOL_DATA_PROVIDER_ADDRESS, UI_POOL_DATA_PROVIDER } from '../constants'
+import LENDING_POOL_ABI from '../constants/abis/LendingPool.json'
+import UI_POOL_DATA_PROVIDER_ABI from '../constants/abis/uipooldataprovider.json'
 
 const UNI_FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
 
@@ -161,6 +165,16 @@ export function useMulticall2Contract() {
   return useContract(chainId && MULTICALL2_ADDRESS[chainId], MULTICALL2_ABI, false)
 }
 
+export function useDataProviderContract() {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && PROTOCOL_DATA_PROVIDER_ADDRESS, PROTOCOL_DATA_PROVIDER_ABI, false)
+}
+
+export function useUiPoolDataProvider() {
+  const { chainId } = useActiveWeb3React()
+  return useContract(UI_POOL_DATA_PROVIDER, UI_POOL_DATA_PROVIDER_ABI, false)
+}
+
 export function useSushiContract(withSignerIfPossible = true): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && SUSHI_ADDRESS[chainId], SUSHI_ABI, withSignerIfPossible)
@@ -186,8 +200,14 @@ export function useFactoryContract(): Contract | null {
 
 export function useRouterContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
+  return useContract(LENDING_POOL_ADDRESS, LENDING_POOL_ABI, true)
+}
+/*
+export function useRouterContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
   return useContract(ROUTER_ADDRESS[chainId], ROUTER_ABI, true)
 }
+*/
 
 export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()

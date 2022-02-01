@@ -1,5 +1,6 @@
 import { AppState } from '..'
 import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list'
+import POFI_TOKEN_LIST from '../../constants/token-lists/pofi-default.tokenlist.json'
 import { TokenList } from '@uniswap/token-lists'
 import { UNSUPPORTED_LIST_URLS } from '../../constants/token-lists'
 import UNSUPPORTED_TOKEN_LIST from '../../constants/token-lists/sushiswap-v2-unsupported.tokenlist.json'
@@ -42,8 +43,8 @@ export function listToTokenMap(list: TokenList): TokenAddressMap {
   return map
 }
 
-const TRANSFORMED_DEFAULT_TOKEN_LIST = listToTokenMap(DEFAULT_TOKEN_LIST)
-
+// const TRANSFORMED_DEFAULT_TOKEN_LIST = listToTokenMap(DEFAULT_TOKEN_LIST)
+const TRANSFORMED_DEFAULT_TOKEN_LIST = listToTokenMap(POFI_TOKEN_LIST)
 export function useAllLists(): AppState['lists']['byUrl'] {
   return useAppSelector((state) => state.lists.byUrl)
 }

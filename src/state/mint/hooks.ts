@@ -193,12 +193,12 @@ export function useDerivedMintInfo(
   if (!account) {
     error = i18n._(t`Connect Wallet`)
   }
-
+  /*
   if (pairState === PairState.INVALID) {
     error = error ?? i18n._(t`Invalid pair`)
   }
-
-  if (!parsedAmounts[Field.CURRENCY_A] || !parsedAmounts[Field.CURRENCY_B]) {
+  */
+  if (!parsedAmounts[Field.CURRENCY_A]) {
     error = error ?? i18n._(t`Enter an amount`)
   }
 
@@ -206,10 +206,6 @@ export function useDerivedMintInfo(
 
   if (currencyAAmount && currencyBalances?.[Field.CURRENCY_A]?.lessThan(currencyAAmount)) {
     error = i18n._(t`Insufficient ${currencies[Field.CURRENCY_A]?.symbol} balance`)
-  }
-
-  if (currencyBAmount && currencyBalances?.[Field.CURRENCY_B]?.lessThan(currencyBAmount)) {
-    error = i18n._(t`Insufficient ${currencies[Field.CURRENCY_B]?.symbol} balance`)
   }
 
   return {

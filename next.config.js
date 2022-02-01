@@ -144,6 +144,22 @@ module.exports = withBundleAnalyzer(
           source: '/balances',
           destination: '/user/balances',
         },
+        {
+          source: '/projects/pp1',
+          destination: '/projects/pp1',
+        },
+        {
+          source: '/deposit/:token*',
+          destination: '/deposit/:token*',
+        },
+        {
+          source: '/withdraw/:token*',
+          destination: '/withdraw/:token*',
+        },
+        {
+          source: '/dashboard',
+          destination: '/dashboard',
+        },
       ]
     },
     i18n: {

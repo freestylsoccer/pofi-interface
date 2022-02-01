@@ -138,7 +138,7 @@ export default function Swap() {
     currencies,
     inputError: swapInputError,
     allowedSlippage,
-  } = useDerivedSwapInfo(doArcher)
+  } = useDerivedSwapInfo(doArcher, loadedUrlParams?.inputCurrencyId)
 
   const {
     wrapType,

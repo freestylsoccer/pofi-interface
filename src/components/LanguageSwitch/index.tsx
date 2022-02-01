@@ -36,7 +36,7 @@ export default function LangSwitcher() {
       {({ open }) => (
         <>
           <div>
-            <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-bold bg-transparent border rounded shadow-sm text-primary border-dark-800 hover:bg-dark-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-700 focus:ring-dark-800">
+            <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-bold border rounded shadow-sm bg-dark-900 text-primary border-dark-800 hover:bg-dark-1000 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-700 focus:ring-dark-800">
               {LANG_TO_COUNTRY[locale]}
               {/* <Image
                 className="inline w-3 h-3 mr-1 align-middle"

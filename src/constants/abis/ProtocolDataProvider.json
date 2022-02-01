@@ -1,0 +1,272 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "contract ILendingPoolAddressesProvider",
+        "name": "addressesProvider",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "ADDRESSES_PROVIDER",
+    "outputs": [
+      {
+        "internalType": "contract ILendingPoolAddressesProvider",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllATokens",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "tokenAddress",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct AaveProtocolDataProvider.TokenData[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllReservesTokens",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "tokenAddress",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct AaveProtocolDataProvider.TokenData[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "project",
+        "type": "address"
+      }
+    ],
+    "name": "getReserveConfigurationData",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "decimals",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "reserveFactor",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "borrowingEnabled",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "depositsEnabled",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "withdrawalsEnabled",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "interestWithdrawalsEnabled",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "isActive",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "isFrozen",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "project",
+        "type": "address"
+      }
+    ],
+    "name": "getReserveData",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "underlyingAsset",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "projectBorrower",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "availableLiquidity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalStableDebt",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "liquidityRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "stableBorrowRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "liquidityIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint40",
+        "name": "lastUpdateTimestamp",
+        "type": "uint40"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "project",
+        "type": "address"
+      }
+    ],
+    "name": "getReserveTokensAddresses",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "aTokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "stableDebtTokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "pTokenAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "project",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "getUserReserveData",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "currentATokenBalance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currentPTokenBalance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currentStableDebt",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currentVariableDebt",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "principalStableDebt",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "stableBorrowRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "liquidityRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint40",
+        "name": "stableRateLastUpdated",
+        "type": "uint40"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

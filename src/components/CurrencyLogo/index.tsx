@@ -25,6 +25,7 @@ const BLOCKCHAIN = {
   [ChainId.FANTOM]: 'fantom',
   [ChainId.HARMONY]: 'harmony',
   [ChainId.MATIC]: 'polygon',
+  [ChainId.MATIC_TESTNET]: 'mumbai',
   [ChainId.XDAI]: 'xdai',
   // [ChainId.OKEX]: 'okex',
   [ChainId.MOONRIVER]: 'moonriver',
@@ -52,7 +53,7 @@ function getCurrencySymbol(currency) {
 
 function getCurrencyLogoUrls(currency) {
   const urls = []
-
+  console.log()
   if (currency.chainId in BLOCKCHAIN) {
     urls.push(
       `https://raw.githubusercontent.com/sushiswap/logos/main/network/${BLOCKCHAIN[currency.chainId]}/${
@@ -68,6 +69,11 @@ function getCurrencyLogoUrls(currency) {
       `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
         currency.address
       }/logo.png`
+    )
+    urls.push(
+      `https://raw.githubusercontent.com/freestylsoccer/logos/main/network/${BLOCKCHAIN[currency.chainId]}/${
+        currency.address
+      }.jpg`
     )
   }
 

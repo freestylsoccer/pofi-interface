@@ -29,7 +29,7 @@ function AppBar(): JSX.Element {
 
   return (
     //     // <header className="flex flex-row justify-between w-screen flex-nowrap">
-    <header className="flex-shrink-0 w-full">
+    <header className="fixed top-0 left-0 z-10 flex-shrink-0 w-full bg-dark-900">
       <Popover as="nav" className="z-10 w-full bg-transparent header-border-b">
         {({ open }) => (
           <>
@@ -40,7 +40,23 @@ function AppBar(): JSX.Element {
                   <div className="hidden sm:block sm:ml-4">
                     <div className="flex space-x-2">
                       {/* <Buy /> */}
-                      <NavLink href="/swap">
+                      <NavLink href="/invest">
+                        <a
+                          id={`invest-nav-link`}
+                          className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                        >
+                          {i18n._(t`Invest`)}
+                        </a>
+                      </NavLink>
+                      <NavLink href="/dashboard">
+                        <a
+                          id={`dashboard-nav-link`}
+                          className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                        >
+                          {i18n._(t`Dashboard`)}
+                        </a>
+                      </NavLink>
+                      {/*<NavLink href="/swap">
                         <a
                           id={`swap-nav-link`}
                           className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -55,7 +71,8 @@ function AppBar(): JSX.Element {
                         >
                           {i18n._(t`Pool`)}
                         </a>
-                      </NavLink>
+                      </NavLink>*/}
+                      {/*
                       {chainId && [ChainId.MAINNET, ChainId.MATIC, ChainId.BSC].includes(chainId) && (
                         <NavLink href={'/migrate'}>
                           <a
@@ -124,12 +141,14 @@ function AppBar(): JSX.Element {
                           </a>
                         </NavLink>
                       )}
+                      */}
                     </div>
                   </div>
                 </div>
 
                 <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
                   <div className="flex items-center justify-between w-full space-x-2 sm:justify-end">
+                    {/*
                     {chainId && [ChainId.MAINNET].includes(chainId) && library && library.provider.isMetaMask && (
                       <>
                         <QuestionHelper text={i18n._(t`Add xSUSHI to your MetaMask wallet`)}>
@@ -174,7 +193,7 @@ function AppBar(): JSX.Element {
                           </div>
                         </QuestionHelper>
                       </>
-                    )}
+                    )}                    
 
                     {chainId && chainId in SUSHI_ADDRESS && library && library.provider.isMetaMask && (
                       <>
@@ -221,6 +240,7 @@ function AppBar(): JSX.Element {
                         </QuestionHelper>
                       </>
                     )}
+                    */}
 
                     {library && library.provider.isMetaMask && (
                       <div className="hidden sm:inline-block">
@@ -287,6 +307,23 @@ function AppBar(): JSX.Element {
 
             <Popover.Panel className="sm:hidden">
               <div className="flex flex-col px-4 pt-2 pb-3 space-y-1">
+                <Link href={'/invest'}>
+                  <a
+                    id={`invest-nav-link`}
+                    className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                  >
+                    {i18n._(t`Invest`)}
+                  </a>
+                </Link>
+                <Link href={'/dashboard'}>
+                  <a
+                    id={`dashboard-nav-link`}
+                    className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                  >
+                    {i18n._(t`Dashboard`)}
+                  </a>
+                </Link>
+                {/*
                 <Link href={'/swap'}>
                   <a
                     id={`swap-nav-link`}
@@ -377,6 +414,7 @@ function AppBar(): JSX.Element {
                       {i18n._(t`Analytics`)}
                     </ExternalLink>
                   )}
+                  */}
               </div>
             </Popover.Panel>
           </>

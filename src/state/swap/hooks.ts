@@ -117,7 +117,10 @@ function involvesAddress(trade: V2Trade<Currency, Currency, TradeType>, checksum
 }
 
 // from the current swap inputs, compute the best trade and return it.
-export function useDerivedSwapInfo(doArcher = false): {
+export function useDerivedSwapInfo(
+  doArcher = false,
+  inputCurrencyID: string
+): {
   currencies: { [field in Field]?: Currency }
   currencyBalances: { [field in Field]?: CurrencyAmount<Currency> }
   parsedAmount: CurrencyAmount<Currency> | undefined
@@ -139,7 +142,7 @@ export function useDerivedSwapInfo(doArcher = false): {
     recipient,
   } = useSwapState()
 
-  const inputCurrency = useCurrency(inputCurrencyId)
+  const inputCurrency = useCurrency(inputCurrencyID)
 
   const outputCurrency = useCurrency(outputCurrencyId)
 
@@ -184,7 +187,7 @@ export function useDerivedSwapInfo(doArcher = false): {
     inputError = inputError ?? i18n._(t`Enter an amount`)
   }
 
-  if (!currencies[Field.INPUT] || !currencies[Field.OUTPUT]) {
+  if (!currencies[Field.INPUT]) {
     inputError = inputError ?? i18n._(t`Select a token`)
   }
 

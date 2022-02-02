@@ -363,9 +363,9 @@ export function useProtocolDataWithRpc(): PoolDataContextData {
 
   // console.log(poolData);
   if (!loading) {
-    const reserves = poolData?.reserves.map((reserve) => ({
+    const reserves = poolData?.reserves?.map((reserve) => ({
       ...reserve,
-      symbol: unPrefixSymbol(reserve.symbol, 'A'),
+      symbol: unPrefixSymbol(reserve?.symbol, 'A'),
     }))
     // console.log(reserves);
 
@@ -373,13 +373,13 @@ export function useProtocolDataWithRpc(): PoolDataContextData {
       ...userReserve,
       reserve: {
         ...userReserve.reserve,
-        symbol: unPrefixSymbol(userReserve.reserve.symbol, 'A'),
+        symbol: unPrefixSymbol(userReserve?.reserve?.symbol, 'A'),
       },
     }))
     // console.log(userReservesData);
     const isUserHasDeposits = userReservesData?.some((userReserve) => userReserve.scaledATokenBalance !== '0')
     // console.log(isUserHasDeposits);
-    const reservesWithFixedUnderlying = reserves.map((reserve) => {
+    const reservesWithFixedUnderlying = reserves?.map((reserve) => {
       return reserve
     })
     // console.log(reservesWithFixedUnderlying);

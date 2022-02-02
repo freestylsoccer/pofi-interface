@@ -115,12 +115,12 @@ function MyApp({
           name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
         />
-        <title key="title">SUSHI</title>
+        <title key="title">POFI</title>
 
         <meta
           key="description"
           name="description"
-          content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
+          content="Invest your crypto in Real Estate projects, Easy and Secure. Welcome to Pofi Investments"
         />
 
         <meta name="application-name" content="SUSHI App" />
@@ -140,7 +140,7 @@ function MyApp({
         <meta
           key="twitter:description"
           name="twitter:description"
-          content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
+          content="Invest your crypto in Real Estate projects, Easy and Secure. Welcome to Pofi Investments"
         />
         <meta key="twitter:image" name="twitter:image" content="https://app.sushi.com/icons/icon-192x192.png" />
         <meta key="twitter:creator" name="twitter:creator" content="@SushiSwap" />
@@ -151,7 +151,7 @@ function MyApp({
         <meta
           key="og:description"
           property="og:description"
-          content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
+          content="Invest your crypto in Real Estate projects, Easy and Secure. Welcome to Pofi Investments"
         />
       </Head>
       <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>

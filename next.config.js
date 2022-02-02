@@ -35,7 +35,7 @@ module.exports = withBundleAnalyzer(
       return [
         {
           source: '/',
-          destination: '/swap',
+          destination: '/invest',
           permanent: true,
         },
         {
@@ -155,6 +155,10 @@ module.exports = withBundleAnalyzer(
         {
           source: '/withdraw/:token*',
           destination: '/withdraw/:token*',
+        },
+        {
+          source: '/withdraw/interest/:token*',
+          destination: '/withdraw/interest/:token*',
         },
         {
           source: '/dashboard',

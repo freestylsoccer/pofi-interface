@@ -1,66 +1,68 @@
-import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { AutoRow, RowBetween, RowCenter } from '../../components/Row'
-import Button, { ButtonError } from '../../components/Button'
+import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCallback'
+import { AutoRow, RowBetween, RowCenter } from '../../../components/Row'
+import Button, { ButtonError } from '../../../components/Button'
 import { Currency, CurrencyAmount, Percent, WNATIVE, currencyEquals } from '@sushiswap/sdk'
-import { ONE_BIPS, ZERO_PERCENT } from '../../constants'
+import { ONE_BIPS, ZERO_PERCENT } from '../../../constants'
 import React, { useCallback, useState } from 'react'
-import TransactionConfirmationModal, { ConfirmationModalContent } from '../../modals/TransactionConfirmationModal'
-import { calculateGasMargin, calculateSlippageAmount } from '../../functions/trade'
-import { currencyId, maxAmountSpend } from '../../functions/currency'
-import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
-import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../../state/user/hooks'
+import TransactionConfirmationModal, { ConfirmationModalContent } from '../../../modals/TransactionConfirmationModal'
+import { calculateGasMargin, calculateSlippageAmount } from '../../../functions/trade'
+import { currencyId, maxAmountSpend } from '../../../functions/currency'
+import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../../state/mint/hooks'
+import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../../../state/user/hooks'
 
-import { AddRemoveTabs } from '../../components/NavigationTabs'
-import Alert from '../../components/Alert'
-import { AutoColumn } from '../../components/Column'
+import { AddRemoveTabs } from '../../../components/NavigationTabs'
+import Alert from '../../../components/Alert'
+import { AutoColumn } from '../../../components/Column'
 import { BigNumber } from '@ethersproject/bignumber'
-import { ConfirmAddModalBottom } from '../../features/liquidity/ConfirmAddModalBottom'
-import Container from '../../components/Container'
-import CurrencyInputPanel from '../../components/CurrencyInputPanel'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import Dots from '../../components/Dots'
-import DoubleCurrencyLogo from '../../components/DoubleLogo'
-import DoubleGlowShadow from '../../components/DoubleGlowShadow'
-import ExchangeHeader from '../../components/ExchangeHeader'
-import { Field } from '../../state/mint/actions'
+import { ConfirmRemoveModalBottom } from '../../../features/liquidity/ConfirmRemoveModalBottom'
+import Container from '../../../components/Container'
+import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
+import CurrencyLogo from '../../../components/CurrencyLogo'
+import Dots from '../../../components/Dots'
+import DoubleCurrencyLogo from '../../../components/DoubleLogo'
+import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
+import ExchangeHeader from '../../../components/ExchangeHeader'
+import { Field } from '../../../state/mint/actions'
 import Head from 'next/head'
-import LiquidityHeader from '../../features/liquidity/LiquidityHeader'
-import LiquidityPrice from '../../features/liquidity/LiquidityPrice'
-import { MinimalPositionCard } from '../../components/PositionCard'
-import NavLink from '../../components/NavLink'
-import { PairState } from '../../hooks/useV2Pairs'
+import LiquidityHeader from '../../../features/liquidity/LiquidityHeader'
+import LiquidityPrice from '../../../features/liquidity/LiquidityPrice'
+import { MinimalPositionCard } from '../../../components/PositionCard'
+import NavLink from '../../../components/NavLink'
+import { PairState } from '../../../hooks/useV2Pairs'
 import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'
 import { TransactionResponse } from '@ethersproject/providers'
-import Typography from '../../components/Typography'
-import UnsupportedCurrencyFooter from '../../features/swap/UnsupportedCurrencyFooter'
-import Web3Connect from '../../components/Web3Connect'
+import Typography from '../../../components/Typography'
+import UnsupportedCurrencyFooter from '../../../features/swap/UnsupportedCurrencyFooter'
+import Web3Connect from '../../../components/Web3Connect'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useCurrency } from '../../hooks/Tokens'
-import { useIsSwapUnsupported } from '../../hooks/useIsSwapUnsupported'
+import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
+import { useCurrency } from '../../../hooks/Tokens'
+import { useIsSwapUnsupported } from '../../../hooks/useIsSwapUnsupported'
 import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
-import { useRouterContract } from '../../hooks'
-import { useTransactionAdder } from '../../state/transactions/hooks'
-import useTransactionDeadline from '../../hooks/useTransactionDeadline'
-import { useWalletModalToggle } from '../../state/application/hooks'
-import Back from '../../components/Back'
-import { useContract } from '../../hooks'
-import { MINTABLE_ERC20 } from '../../constants/abis/erc20'
-import { useReserveData } from '../../state/reserve/hooks'
+import { useRouterContract } from '../../../hooks'
+import { useTransactionAdder } from '../../../state/transactions/hooks'
+import useTransactionDeadline from '../../../hooks/useTransactionDeadline'
+import { useWalletModalToggle } from '../../../state/application/hooks'
+import Back from '../../../components/Back'
+import { useContract } from '../../../hooks'
+import { MINTABLE_ERC20 } from '../../../constants/abis/erc20'
+import { useReserveData } from '../../../state/reserve/hooks'
 
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
-export default function Add() {
+export default function WithdrawInterest() {
   const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
   const router = useRouter()
   const tokens = router.query.tokens
-  const [currencyIdA, currencyIdB] = (tokens as string[]) || [undefined, undefined]
 
-  const currencyA = useCurrency(currencyIdA)
-  const currencyB = useCurrency(currencyIdB)
+  const [currencyIdA, currencyIdB, currencyIdC] = (tokens as string[]) || [undefined, undefined, undefined]
+
+  const currencyA = useCurrency(currencyIdA) // aToken
+  const currencyB = useCurrency(currencyIdB) // underlyingAsset
+  // const currencyC = useCurrency(currencyIdC) // project
 
   const oneCurrencyIsWETH = Boolean(
     chainId &&
@@ -87,9 +89,11 @@ export default function Add() {
     poolTokenPercentage,
     error,
   } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
+  // console.log(error)
+  // console.log(currencyBalances)
   // get reserve data info
-  const [data, callStatus] = useReserveData(currencyIdB)
-
+  const [data, callStatus] = useReserveData(currencyIdC)
+  // console.log(data)
   const reserveData = callStatus ? [] : data?.reserveData[0].result
 
   const liquidityRate = callStatus ? '0x00' : reserveData?.liquidityRate
@@ -136,9 +140,10 @@ export default function Add() {
   const cont = useContract(currencyIdA, MINTABLE_ERC20)
   async function mint() {
     // console.log(cont)
-    await cont.mint('100000000000')
+    await cont.mint('100000000')
     console.log('minted.. ')
   }
+
   const atMaxAmounts: { [field in Field]?: CurrencyAmount<Currency> } = [Field.CURRENCY_A, Field.CURRENCY_B].reduce(
     (accumulator, field) => {
       return {
@@ -156,7 +161,7 @@ export default function Add() {
 
   const addTransaction = useTransactionAdder()
 
-  async function onAdd() {
+  async function onWithdraw() {
     if (!chainId || !library || !account || !routerContract) return
 
     const { [Field.CURRENCY_A]: parsedAmountA } = parsedAmounts
@@ -169,9 +174,9 @@ export default function Add() {
       method: (...args: any) => Promise<TransactionResponse>,
       args: Array<string | string[] | number>,
       value: BigNumber | null
-    estimate = routerContract.estimateGas.deposit
-    method = routerContract.deposit
-    args = [currencyIdB, currencyIdA, parsedAmountA.quotient.toString(), account]
+    estimate = routerContract.estimateGas.withdraw
+    method = routerContract.withdraw
+    args = [currencyIdC, currencyIdB, parsedAmountA.quotient.toString(), account]
     value = null
 
     setAttemptingTxn(true)
@@ -185,7 +190,7 @@ export default function Add() {
 
           addTransaction(response, {
             summary: i18n._(
-              t`Deposit ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(3)} ${currencies[Field.CURRENCY_A]?.symbol}`
+              t`Withdraw ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(2)} ${currencies[Field.CURRENCY_B]?.symbol}`
             ),
           })
 
@@ -193,8 +198,8 @@ export default function Add() {
 
           ReactGA.event({
             category: 'Liquidity',
-            action: 'Deposit',
-            label: [currencies[Field.CURRENCY_A]?.symbol].join('/'),
+            action: 'Withdraw',
+            label: [currencies[Field.CURRENCY_B]?.symbol].join('/'),
           })
         })
       )
@@ -212,18 +217,18 @@ export default function Add() {
       <div className="pb-4">
         <div className="flex items-center justify-start gap-3">
           <div className="text-xl font-bold md:text-3xl text-high-emphesis">
-            {parsedAmounts[Field.CURRENCY_A]?.toSignificant(3)}
+            {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}
           </div>
           <div className="grid grid-flow-col gap-2">
-            <CurrencyLogo currency={currencyA} size={48} />
+            <CurrencyLogo currency={currencyB} size={48} />
           </div>
         </div>
         <div className="text-lg font-medium md:text-2xl text-high-emphesis">
-          {currencies[Field.CURRENCY_A]?.symbol}
+          {currencies[Field.CURRENCY_B]?.symbol}
           &nbsp;{i18n._(t`Tokens`)}
         </div>
         <div className="pt-3 text-xs italic text-secondary">
-          {i18n._(t`The deposit rate can vary but can never be less than the initial defined rate.`)}
+          {i18n._(t`These are your transaction details. Make sure to check if this is correct before submitting.`)}
         </div>
       </div>
     )
@@ -231,12 +236,12 @@ export default function Add() {
 
   const modalBottom = () => {
     return (
-      <ConfirmAddModalBottom
+      <ConfirmRemoveModalBottom
         price={price}
         currencies={currencies}
         parsedAmounts={parsedAmounts}
         noLiquidity={noLiquidity}
-        onAdd={onAdd}
+        onWithdraw={onWithdraw}
         poolTokenPercentage={poolTokenPercentage}
         liquidityRate={liquidityRate}
         stableBorrowRate={stableBorrowRate}
@@ -286,7 +291,7 @@ export default function Add() {
   }, [onFieldAInput, txHash])
 
   const addIsUnsupported = useIsSwapUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
-
+  // console.log(formattedAmounts[Field.CURRENCY_B])
   // console.log(
   //   { addIsUnsupported, isValid, approvalA, approvalB },
   //   approvalA === ApprovalState.APPROVED && approvalB === ApprovalState.APPROVED
@@ -338,7 +343,7 @@ export default function Add() {
               hash={txHash}
               content={() => (
                 <ConfirmationModalContent
-                  title={i18n._(t`You will deposit`)}
+                  title={i18n._(t`You will withdraw`)}
                   onDismiss={handleDismissConfirmation}
                   topContent={modalHeader}
                   bottomContent={modalBottom}
@@ -352,12 +357,8 @@ export default function Add() {
               )}
 
               <div>
-                <h2 className="pb-1 text-lg text-center">{i18n._(t`How much would you like to deposit?`)}</h2>
-                <div className="text-sm center">
-                  {i18n._(
-                    t`Please enter an amount you would like to deposit. The maximum amount you can deposit is shown below.`
-                  )}
-                </div>
+                <h2 className="pb-1 text-lg text-center">{i18n._(t`Withdraw`)}</h2>
+                <div className="text-sm text-center">{i18n._(t`How much do you want to withdraw?`)}</div>
               </div>
 
               <div>
@@ -372,21 +373,10 @@ export default function Add() {
                   currency={currencies[Field.CURRENCY_A]}
                   id="add-liquidity-input-tokena"
                   showCommonBases
-                  customText={i18n._(t`Available to deposit`)}
+                  customText={i18n._(t`Available to withdraw`)}
+                  otherCurrency={currencies[Field.CURRENCY_B]}
                 />
               </div>
-
-              {currencies[Field.CURRENCY_A] && pairState !== PairState.INVALID && (
-                <div className="p-1 rounded bg-dark-800">
-                  <LiquidityPrice
-                    currencies={currencies}
-                    price={price}
-                    noLiquidity={noLiquidity}
-                    poolTokenPercentage={poolTokenPercentage}
-                    className="bg-dark-900"
-                  />
-                </div>
-              )}
 
               {addIsUnsupported ? (
                 <Button color="gradient" size="lg" disabled>
@@ -395,14 +385,11 @@ export default function Add() {
               ) : !account ? (
                 <Web3Connect size="lg" color="blue" className="w-full" />
               ) : (
-                (approvalA === ApprovalState.NOT_APPROVED ||
-                  approvalA === ApprovalState.PENDING ||
-                  isValid ||
-                  !!error) && (
+                (isValid || !!error) && (
                   <AutoColumn gap={'md'}>
-                    {
+                    {/*
                       <RowCenter>
-                        {approvalA !== ApprovalState.APPROVED && approvalA !== ApprovalState.UNKNOWN && (
+                        {(approvalA !== ApprovalState.APPROVED) && (approvalA !== ApprovalState.UNKNOWN) && (
                           <Button
                             color="gradient"
                             size="lg"
@@ -418,17 +405,16 @@ export default function Add() {
                               error ?? i18n._(t`Approve ${currencies[Field.CURRENCY_A]?.symbol}`)
                             )}
                           </Button>
-                        )}
-                      </RowCenter>
-                    }
+                        )}                        
+                      </RowCenter> */}
 
-                    {approvalA === ApprovalState.APPROVED && (
+                    {formattedAmounts[Field.CURRENCY_A] != '' && (
                       <ButtonError
                         onClick={() => {
-                          isExpertMode ? onAdd() : setShowConfirm(true)
+                          isExpertMode ? onWithdraw() : setShowConfirm(true)
                         }}
-                        disabled={!!error || approvalA !== ApprovalState.APPROVED}
-                        error={!!error && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
+                        disabled={!!error}
+                        error={!!error && !!parsedAmounts[Field.CURRENCY_A]}
                       >
                         {error ?? i18n._(t`Continue`)}
                       </ButtonError>

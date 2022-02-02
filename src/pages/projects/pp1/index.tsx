@@ -159,7 +159,7 @@ export default function Theter() {
 
           {account && (
             <NavLink href={`/deposit/${getUsdtAddress()}/${PROJECT_USDT}`}>
-              <a className="flex-auto opacity-100 c-py bg-gradient-to-r from-blue to-pink text-high-emphesis focus:text-high-emphesis lg:px-5 xl:px-8 whitespace-nowrap">
+              <a className="flex-auto px-4 opacity-100 c-py bg-gradient-to-r from-blue to-pink text-high-emphesis focus:text-high-emphesis lg:px-5 xl:px-8 whitespace-nowrap">
                 Invest
               </a>
             </NavLink>

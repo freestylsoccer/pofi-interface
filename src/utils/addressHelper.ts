@@ -1,5 +1,6 @@
 import { ChainId } from '@sushiswap/sdk'
 import addresses from '../constants/contracts'
+import { useActiveWeb3React } from '../hooks'
 
 export interface Address {
   97: string
@@ -33,10 +34,14 @@ export interface Address {
   40: string
 }
 export const getAddress = (address: Address): string => {
-  const chainId = 80001
+  const { chainId } = useActiveWeb3React()
   return address[chainId] ? address[chainId] : address[ChainId.MATIC_TESTNET]
 }
 
 export const getUsdtAddress = () => {
   return getAddress(addresses.usdt)
+}
+
+export const getTusdAddress = () => {
+  return getAddress(addresses.tusd)
 }

@@ -8,8 +8,8 @@ import Slider from '../../../components/Slider'
 import NavLink from '../../../components/NavLink'
 import Lightbox from '../../../components/LightBox'
 import SimpleReactLightbox from 'simple-react-lightbox'
-import { getUsdtAddress } from '../../../utils/addressHelper'
-import { PROJECT_USDT } from '../../../constants'
+import { getTusdAddress } from '../../../utils/addressHelper'
+import { PROJECT_TUSD } from '../../../constants'
 import { useReserveData } from '../../../state/reserve/hooks'
 import { formatBigNumberToFixed } from '../../../utils/formatBalance'
 import { useToken } from '../../../hooks/Tokens'
@@ -37,11 +37,11 @@ const elements = [
   },
 ]
 
-export default function Theter() {
+export default function Trueusd() {
   const { account, chainId } = useActiveWeb3React()
   // get reserve data info
-  const [data] = useReserveData(PROJECT_USDT[chainId])
-  const undelayingAsset = useToken(getUsdtAddress())
+  const [data] = useReserveData(PROJECT_TUSD[chainId])
+  const undelayingAsset = useToken(getTusdAddress())
   const reserveData = data?.reserveData[0].result
   const liquidityRate = reserveData?.liquidityRate
   const availableLiquidity = reserveData?.availableLiquidity
@@ -158,7 +158,7 @@ export default function Theter() {
           </NavLink>
 
           {account && (
-            <NavLink href={`/deposit/${getUsdtAddress()}/${PROJECT_USDT[chainId]}`}>
+            <NavLink href={`/deposit/${getTusdAddress()}/${PROJECT_TUSD[chainId]}`}>
               <a className="flex-auto px-4 opacity-100 c-py bg-gradient-to-r from-blue to-pink text-high-emphesis focus:text-high-emphesis lg:px-5 xl:px-8 whitespace-nowrap">
                 Invest
               </a>
@@ -177,7 +177,7 @@ export default function Theter() {
       <div className="flex content-between justify-center mx-5 NnZDJ sm:hidden">
         <nav className="py-2.5 bg-gray-700 border-gray-200 dark:bg-gray-800">
           {account && (
-            <NavLink href={`/deposit/${getUsdtAddress()}/${PROJECT_USDT[chainId]}`}>
+            <NavLink href={`/deposit/${getTusdAddress()}/${PROJECT_TUSD[chainId]}`}>
               <a className="flex-auto px-8 opacity-100 c-py bg-gradient-to-r from-blue to-pink text-high-emphesis focus:text-high-emphesis whitespace-nowrap">
                 Invest
               </a>

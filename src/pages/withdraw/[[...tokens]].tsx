@@ -3,7 +3,7 @@ import { AutoRow, RowBetween, RowCenter } from '../../components/Row'
 import Button, { ButtonError } from '../../components/Button'
 import { Currency, CurrencyAmount, Percent, WNATIVE, currencyEquals } from '@sushiswap/sdk'
 import { ONE_BIPS, ZERO_PERCENT } from '../../constants'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useMemo } from 'react'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../modals/TransactionConfirmationModal'
 import { calculateGasMargin, calculateSlippageAmount } from '../../functions/trade'
 import { currencyId, maxAmountSpend } from '../../functions/currency'
@@ -48,7 +48,7 @@ import { useWalletModalToggle } from '../../state/application/hooks'
 import Back from '../../components/Back'
 import { useContract } from '../../hooks'
 import { MINTABLE_ERC20 } from '../../constants/abis/erc20'
-import { useReserveData } from '../../state/reserve/hooks'
+import { useProtocolDataWithRpc } from '../../features/farm/hooks'
 
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
@@ -63,7 +63,7 @@ export default function Withdraw() {
   const currencyA = useCurrency(currencyIdA) // aToken
   const currencyB = useCurrency(currencyIdB) // underlyingAsset
   // const currencyC = useCurrency(currencyIdC) // project
-
+  // console.log(currencyIdA)
   const oneCurrencyIsWETH = Boolean(
     chainId &&
       ((currencyA && currencyEquals(currencyA, WNATIVE[chainId])) ||
@@ -91,18 +91,6 @@ export default function Withdraw() {
   } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
   // console.log(error)
   // console.log(currencyBalances)
-  // get reserve data info
-  const [data, callStatus] = useReserveData(currencyIdC)
-  // console.log(data)
-  const reserveData = callStatus ? [] : data?.reserveData[0].result
-
-  const liquidityRate = callStatus ? '0x00' : reserveData?.liquidityRate
-  const stableBorrowRate = callStatus ? '0x00' : reserveData?.stableBorrowRate
-  const availableLiquidity = callStatus ? '0x00' : reserveData?.availableLiquidity
-  const totalStableDebt = callStatus ? '0x00' : reserveData?.totalStableDebt
-  const reserveSize = callStatus ? '0x00' : availableLiquidity?.add(totalStableDebt)
-  // console.log(reserveSize)
-  // console.log(formatBigNumberToFixed(liquidityRate, 1, 27)) 1545962.23586 + 10900.0001 + 1464700.7769
 
   const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
 
@@ -242,15 +230,12 @@ export default function Withdraw() {
         noLiquidity={noLiquidity}
         onWithdraw={onWithdraw}
         poolTokenPercentage={poolTokenPercentage}
-        liquidityRate={liquidityRate}
-        stableBorrowRate={stableBorrowRate}
-        reserveSize={reserveSize}
       />
     )
   }
 
   const pendingText = i18n._(
-    t`Depositing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencies[Field.CURRENCY_A]?.symbol}`
+    t`Withdrawing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencies[Field.CURRENCY_B]?.symbol}`
   )
 
   const handleCurrencyASelect = useCallback(

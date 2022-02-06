@@ -382,6 +382,7 @@
   "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review": "Când creați o pereche, sunteți primul furnizor de lichidități. Raportul de token-uri pe care îl adăugați va stabili prețul acestui fond comun. Odată ce sunteți mulțumit de tarif, faceți clic pe furnizare ofertă a revizui",
   "Withdraw": "Retrageți",
   "Withdraw {0} {1}": "",
+  "Withdrawing {0} {1}": "",
   "Wrap": "Încheiați",
   "Wrong Network": "Rețea greșită",
   "Yesterday's APR": "APR de ieri",

@@ -1,16 +1,14 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { AutoRow, RowBetween, RowCenter } from '../../components/Row'
+import { RowCenter } from '../../components/Row'
 import Button, { ButtonError } from '../../components/Button'
 import { Currency, CurrencyAmount, Percent, WNATIVE, currencyEquals } from '@sushiswap/sdk'
-import { ONE_BIPS, ZERO_PERCENT } from '../../constants'
 import React, { useCallback, useState } from 'react'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../modals/TransactionConfirmationModal'
-import { calculateGasMargin, calculateSlippageAmount } from '../../functions/trade'
+import { calculateGasMargin } from '../../functions/trade'
 import { currencyId, maxAmountSpend } from '../../functions/currency'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
 import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../../state/user/hooks'
 
-import { AddRemoveTabs } from '../../components/NavigationTabs'
 import Alert from '../../components/Alert'
 import { AutoColumn } from '../../components/Column'
 import { BigNumber } from '@ethersproject/bignumber'
@@ -19,20 +17,15 @@ import Container from '../../components/Container'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import Dots from '../../components/Dots'
-import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import DoubleGlowShadow from '../../components/DoubleGlowShadow'
-import ExchangeHeader from '../../components/ExchangeHeader'
 import { Field } from '../../state/mint/actions'
 import Head from 'next/head'
 import LiquidityHeader from '../../features/liquidity/LiquidityHeader'
 import LiquidityPrice from '../../features/liquidity/LiquidityPrice'
 import { MinimalPositionCard } from '../../components/PositionCard'
-import NavLink from '../../components/NavLink'
 import { PairState } from '../../hooks/useV2Pairs'
-import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'
 import { TransactionResponse } from '@ethersproject/providers'
-import Typography from '../../components/Typography'
 import UnsupportedCurrencyFooter from '../../features/swap/UnsupportedCurrencyFooter'
 import Web3Connect from '../../components/Web3Connect'
 import { t } from '@lingui/macro'
@@ -48,7 +41,7 @@ import { useWalletModalToggle } from '../../state/application/hooks'
 import Back from '../../components/Back'
 import { useContract } from '../../hooks'
 import { MINTABLE_ERC20 } from '../../constants/abis/erc20'
-import { useReserveData } from '../../state/reserve/hooks'
+import { useProtocolDataWithRpc } from '../../features/farm/hooks'
 
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
@@ -87,16 +80,33 @@ export default function Add() {
     poolTokenPercentage,
     error,
   } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
+
   // get reserve data info
-  const [data, callStatus] = useReserveData(currencyIdB)
+  const { reserves: reservesData } = useProtocolDataWithRpc()
+  const type = router.query.filter == null ? 'current' : (router.query.filter as string)
 
-  const reserveData = callStatus ? [] : data?.reserveData[0].result
+  const FILTER = {
+    all: (reserve) => reserve.projectStatus === true,
+    current: (reserve) =>
+      reserve?.project === currencyIdB.toLocaleLowerCase() &&
+      reserve?.underlyingAsset === currencyIdA.toLocaleLowerCase(),
+  }
 
-  const liquidityRate = callStatus ? '0x00' : reserveData?.liquidityRate
-  const stableBorrowRate = callStatus ? '0x00' : reserveData?.stableBorrowRate
-  const availableLiquidity = callStatus ? '0x00' : reserveData?.availableLiquidity
-  const totalStableDebt = callStatus ? '0x00' : reserveData?.totalStableDebt
-  const reserveSize = callStatus ? '0x00' : availableLiquidity?.add(totalStableDebt)
+  const reserve = reservesData?.filter((reserve) => {
+    return type in FILTER ? FILTER[type](reserve) : true
+  })
+
+  const availableLiquidity =
+    reserve?.[0]?.availableLiquidity === undefined
+      ? BigNumber.from(0)
+      : BigNumber.from(reserve?.[0]?.availableLiquidity)
+  const totalPrincipalStableDebt =
+    reserve?.[0]?.totalPrincipalStableDebt === undefined
+      ? BigNumber.from(0)
+      : BigNumber.from(reserve?.[0]?.totalPrincipalStableDebt)
+  const reserveSize = availableLiquidity?.add(totalPrincipalStableDebt)
+
+  // console.log(reserve[0].projectLiquidityRate)
   // console.log(reserveSize)
   // console.log(formatBigNumberToFixed(liquidityRate, 1, 27)) 1545962.23586 + 10900.0001 + 1464700.7769
 
@@ -238,8 +248,16 @@ export default function Add() {
         noLiquidity={noLiquidity}
         onAdd={onAdd}
         poolTokenPercentage={poolTokenPercentage}
-        liquidityRate={liquidityRate}
-        stableBorrowRate={stableBorrowRate}
+        liquidityRate={
+          reserve?.[0]?.liquidityRate === '0'
+            ? BigNumber.from(reserve?.[0]?.projectLiquidityRate)
+            : BigNumber.from(reserve?.[0]?.liquidityRate)
+        }
+        stableBorrowRate={
+          reserve?.[0]?.stableBorrowRate === '0'
+            ? BigNumber.from(reserve?.[0]?.projectBorrowRate)
+            : BigNumber.from(reserve?.[0]?.stableBorrowRate)
+        }
         reserveSize={reserveSize}
       />
     )
@@ -359,7 +377,11 @@ export default function Add() {
                   )}
                 </div>
               </div>
-
+              {/*<Button
+                onClick={() => mint()}
+              >
+                mint
+              </Button>*/}
               <div>
                 <CurrencyInputPanel
                   value={formattedAmounts[Field.CURRENCY_A]}

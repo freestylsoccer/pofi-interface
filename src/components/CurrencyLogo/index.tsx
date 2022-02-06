@@ -55,7 +55,7 @@ function getCurrencyLogoUrls(currency) {
   const urls = []
   console.log()
   if (currency.chainId in BLOCKCHAIN) {
-    urls.push(
+    /*urls.push(
       `https://raw.githubusercontent.com/sushiswap/logos/main/network/${BLOCKCHAIN[currency.chainId]}/${
         currency.address
       }.jpg`
@@ -69,7 +69,7 @@ function getCurrencyLogoUrls(currency) {
       `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
         currency.address
       }/logo.png`
-    )
+    )*/
     urls.push(
       `https://raw.githubusercontent.com/freestylsoccer/logos/main/network/${BLOCKCHAIN[currency.chainId]}/${
         currency.address

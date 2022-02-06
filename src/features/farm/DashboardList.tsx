@@ -9,7 +9,7 @@ import { useInfiniteScroll } from './hooks'
 import { useLingui } from '@lingui/react'
 import useSortableData from '../../hooks/useSortableData'
 
-const DashboardList = ({ projects, term }) => {
+const DashboardList = ({ projects, type, term }) => {
   const { items, requestSort, sortConfig } = useSortableData(projects, { key: 'pTokenBalance' })
   const [numDisplayed, setNumDisplayed] = useInfiniteScroll(items)
   const { i18n } = useLingui()
@@ -55,7 +55,7 @@ const DashboardList = ({ projects, term }) => {
       >
         <div className="space-y-4">
           {items.slice(0, numDisplayed).map((project, index) => (
-            <DashboardListItem key={index} project={project} />
+            <DashboardListItem key={index} project={project} type={type} />
           ))}
         </div>
       </InfiniteScroll>

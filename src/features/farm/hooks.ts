@@ -1,4 +1,3 @@
-import React, { ReactElement, ReactNode, useContext } from 'react'
 import {
   ChainId,
   CurrencyAmount,
@@ -7,7 +6,7 @@ import {
   MASTERCHEF_V2_ADDRESS,
   MINICHEF_ADDRESS,
 } from '@sushiswap/sdk'
-import { Chef, PairType } from './enum'
+import { Chef } from './enum'
 import { Dispatch, useCallback, useEffect, useMemo, useState } from 'react'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from '../../state/multicall/hooks'
 import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from '../../hooks'
@@ -20,6 +19,7 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import zip from 'lodash/zip'
 import { useUiPoolDataProvider } from '../../hooks'
 import { ethers, BigNumber } from 'ethers'
+import { LENDING_POOL_ADDRESSESS_PROVIDER } from '../../constants'
 
 export function useChefContract(chef: Chef) {
   const masterChefContract = useMasterChefContract()
@@ -241,17 +241,18 @@ type ReserveData = {
   totalPrincipalStableDebt: string
   totalScaledVariableDebt: string
   lastUpdateTimestamp: number
+  projectLiquidityRate: string
+  projectBorrowRate: string
 }
 
 type UserReserveData = {
   scaledATokenBalance: string
-  usageAsCollateralEnabledOnUser: boolean
   scaledVariableDebt: string
   variableBorrowIndex: string
   aTokenBalance: string
   pTokenBalance: string
+  stableDebtTokenBalance: string
   scaledPTokenBalance: string
-  stableBorrowRate: string
   principalStableDebt: string
   stableBorrowLastUpdateTimestamp: number
   reserve: {
@@ -262,13 +263,18 @@ type UserReserveData = {
     symbol: string
     decimals: number
     liquidityRate: BigNumber
+    stableBorrowRate: BigNumber
     reserveLiquidationBonus: string
     lastUpdateTimestamp: number
     aTokenAddress: string
     pTokenAddress: string
+    stableDebtTokenAddress: string
     withdrawalsEnabled: boolean
     interestWithdrawalsEnabled: boolean
     depositsEnabled: boolean
+    borrowingEnabled: boolean
+    projectLiquidityRate: string
+    projectBorrowRate: string
   }
 }
 
@@ -286,11 +292,11 @@ export interface StaticPoolDataContextData {
 }
 
 export function useProtocolDataWithRpc(): PoolDataContextData {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const currentAccount = account ? account.toLowerCase() : ethers.constants.AddressZero
   const poolDataProviderContract = useUiPoolDataProvider()
-  const addressessProvider = '0x5108ee914a3cBaBAE2258B3dE9dE053DCc869BAa'
-
+  const addressessProvider = LENDING_POOL_ADDRESSESS_PROVIDER[chainId]
+  // console.log(addressessProvider)
   const reservesData = useSingleContractMultipleData(
     poolDataProviderContract,
     'getReservesData',
@@ -298,7 +304,7 @@ export function useProtocolDataWithRpc(): PoolDataContextData {
     undefined,
     100_000
   )
-
+  // console.log(reservesData)
   const userReserves = useSingleContractMultipleData(
     poolDataProviderContract,
     'getUserReservesData',
@@ -306,7 +312,7 @@ export function useProtocolDataWithRpc(): PoolDataContextData {
     undefined,
     100_000
   )
-
+  // console.log(userReserves)
   const reservesDataLoading: boolean = useMemo(
     () => reservesData.some((callState) => callState.loading),
     [reservesData]
@@ -329,29 +335,35 @@ export function useProtocolDataWithRpc(): PoolDataContextData {
     formattedReserve.project = rawReserve.project.toLowerCase()
     return formattedReserve
   })
-  // console.log(formattedReservesData);
+  // console.log(userReserves);
   const rawUserReserveData = userReserves?.[0]?.result?.[0]
   // console.log(rawUserReserveData);
+
   const formattedUserReserves = rawUserReserveData?.map((rawUserReserve) => {
     const reserve = formattedReservesData.find((resp) => resp.project === rawUserReserve.project.toLowerCase())
-
+    // console.log(reserve);
     const formattedUserReserve = formatObjectWithBNFields(rawUserReserve)
-    formattedUserReserve.id = (currentAccount + reserve.id).toLowerCase()
+    formattedUserReserve.id = (currentAccount + reserve?.id).toLowerCase()
 
     formattedUserReserve.reserve = {
-      id: reserve.id,
+      id: reserve?.id,
       underlyingAsset: reserve.underlyingAsset,
       name: reserve.name,
       symbol: reserve.symbol,
       decimals: reserve.decimals,
       liquidityRate: BigNumber.from(reserve.liquidityRate),
+      stableBorrowRate: BigNumber.from(reserve.stableBorrowRate),
       reserveLiquidationBonus: reserve.reserveLiquidationBonus,
       lastUpdateTimestamp: reserve.lastUpdateTimestamp,
       aTokenAddress: reserve.aTokenAddress,
       pTokenAddress: reserve.pTokenAddress,
+      stableDebtTokenAddress: reserve.stableDebtTokenAddress,
       withdrawalsEnabled: reserve.withdrawalsEnabled,
       interestWithdrawalsEnabled: reserve.interestWithdrawalsEnabled,
       depositsEnabled: reserve.depositsEnabled,
+      borrowingEnabled: reserve.borrowingEnabled,
+      projectLiquidityRate: reserve.projectLiquidityRate,
+      projectBorrowRate: reserve.projectBorrowRate,
     }
     return formattedUserReserve
   })

@@ -382,6 +382,7 @@
   "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review": "Создавая пару, вы являетесь первым поставщиком ликвидности. Соотношение добавляемых вами токенов будет определять цену этого пула. Как только вы будете довольны ставкой, нажмите «поставка», чтобы просмотреть",
   "Withdraw": "Снять",
   "Withdraw {0} {1}": "",
+  "Withdrawing {0} {1}": "",
   "Wrap": "Завернуть",
   "Wrong Network": "Неправильная сеть",
   "Yesterday's APR": "Вчерашняя годовая процентная ставка",

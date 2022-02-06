@@ -382,6 +382,7 @@
   "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review": "هنگام ایجاد جفت، شما اولین تامین کننده لیکوییدیتی هستید. نسبت توکن هایی که اضافه می کنید، قیمت این استخر را مشخص خواهند کرد. اگر با نرخ موافق بودید، می توانید برای مشاهده بر روی تامین (supply) کلیک کنید",
   "Withdraw": "برداشت",
   "Withdraw {0} {1}": "",
+  "Withdrawing {0} {1}": "",
   "Wrap": "پوشاندن",
   "Wrong Network": "شبکه اشتباه",
   "Yesterday's APR": "APR دیروز",

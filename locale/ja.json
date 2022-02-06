@@ -382,6 +382,7 @@
   "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review": "ペアを作成すると、あなたが最初の流動性プロバイダーとなります。追加したトークンの比率によって、このプールの価格が設定されます。レートに問題がなければ、 供給をクリックして確認します",
   "Withdraw": "引き出す",
   "Withdraw {0} {1}": "",
+  "Withdrawing {0} {1}": "",
   "Wrap": "ラップ",
   "Wrong Network": "間違ったネットワーク",
   "Yesterday's APR": "昨日のAPR",

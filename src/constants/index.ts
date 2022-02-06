@@ -16,7 +16,7 @@ export const RPC = {
   [ChainId.MATIC_TESTNET]: 'https://rpc-mumbai.matic.today',
   [ChainId.XDAI]: 'https://rpc.xdaichain.com',
   [ChainId.BSC]: 'https://bsc-dataseed.binance.org/',
-  [ChainId.BSC_TESTNET]: 'https://data-seed-prebsc-2-s3.binance.org:8545',
+  [ChainId.BSC_TESTNET]: 'https://data-seed-prebsc-1-s1.binance.org:8545',
   [ChainId.MOONBEAM_TESTNET]: 'https://rpc.testnet.moonbeam.network',
   [ChainId.AVALANCHE]: 'https://api.avax.network/ext/bc/C/rpc',
   [ChainId.AVALANCHE_TESTNET]: 'https://api.avax-test.network/ext/bc/C/rpc',
@@ -304,17 +304,47 @@ export const EIP_1559_ACTIVATION_BLOCK: { [chainId in ChainId]?: number } = {
   [ChainId.RINKEBY]: 8897988,
 }
 
-export const LENDING_POOL_ADDRESSESS_PROVIDER = '0x5108ee914a3cBaBAE2258B3dE9dE053DCc869BAa'
-export const LENDING_POOL_ADDRESS = '0x258Ed45f69A1061Baf4d2c07b6F4D95C9e003A65'
-export const PROTOCOL_DATA_PROVIDER_ADDRESS = '0x78A67A5DcC72F1FB9D75Fc722bF4EC76764b1897'
-export const UI_POOL_DATA_PROVIDER = '0x03A3D1557acF121610b0A836525c0f2cBc545b86'
+export const LENDING_POOL_ADDRESSESS_PROVIDER: { [chainId in ChainId]?: string } = {
+  [ChainId.MATIC_TESTNET]: '0x1255F085c6373007a4E0Dc6A910371a9Fc85c5Ab',
+  [ChainId.BSC_TESTNET]: '0xDeB7Fc10dc0591849c4F636Bc7c135c3961f16Be',
+}
+export const LENDING_POOL_ADDRESS: { [chainId in ChainId]?: string } = {
+  [ChainId.MATIC_TESTNET]: '0x1DEA34e2556511b6A36783CbF716e10CFC709a35',
+  [ChainId.BSC_TESTNET]: '0x3a7e85f8D7163967Bd9C9BbfE114fDD0bBe7da04',
+}
+export const PROTOCOL_DATA_PROVIDER_ADDRESS: { [chainId in ChainId]?: string } = {
+  [ChainId.MATIC_TESTNET]: '0x538e6Fc93d954176345c41E9B49a295632F8d9B7',
+  [ChainId.BSC_TESTNET]: '0xCb3f06455562a931522e45f4A7a239c73be8deA0',
+}
+export const UI_POOL_DATA_PROVIDER: { [chainId in ChainId]?: string } = {
+  [ChainId.MATIC_TESTNET]: '0xb9Fb44436D9f44e04062Eb5e5798238c27b58B19',
+  [ChainId.BSC_TESTNET]: '0x2eAEdEE87564286D32a3bBB450EAE5Cc47190036',
+}
 
-export const PROJECT_DAI = '0x23A5E6AEC1B28ed146C6b5f62a5611c2D9419387'
-export const PROJECT_TUSD = '0xB0B684F36041387f2C6EEceD224dFB4F51a6ab89'
-export const PROJECT_USDC = '0x429e3277F75664A34ca1727B9810cFCeA5014856'
-export const PROJECT_USDT = '0xeC68c17332D18eD3E0f90CaA84754e4ecD940EE0'
-export const PROJECT_SUSD = '0x73954eae95ad943b23Af3f1131dcb07258A61682'
-export const PROJECT_BUSD = '0x03A3D1557acF121610b0A836525c0f2cBc545b86'
+export const PROJECT_DAI: { [chainId in ChainId]?: string } = {
+  [ChainId.MATIC_TESTNET]: '0x58397AbCe419984AC70ae1B24869C84a05111e21',
+  [ChainId.BSC_TESTNET]: '0xd0144480064B0d0E22399BC1AF7b244Fd21f95a4',
+}
+export const PROJECT_TUSD: { [chainId in ChainId]?: string } = {
+  [ChainId.MATIC_TESTNET]: '0xd0761F8315d52CCc7B5D524032060e7166c47a00',
+  [ChainId.BSC_TESTNET]: '0xBb3A93Fdd5d6a2940fa76CE97870B62b4a7Eb841',
+}
+export const PROJECT_USDC: { [chainId in ChainId]?: string } = {
+  [ChainId.MATIC_TESTNET]: '0x28B389456aa1f841261f0809d2c2b5106566E13f',
+  [ChainId.BSC_TESTNET]: '0x743765Bb7D4c93705E58BD666c9161ac3EE992E1',
+}
+export const PROJECT_USDT: { [chainId in ChainId]?: string } = {
+  [ChainId.MATIC_TESTNET]: '0x4633c6F79e27e1B75eA38632740506dD5f56e33C',
+  [ChainId.BSC_TESTNET]: '0x2CEE890EAb75a672CDc443993DeAF329E0D24809',
+}
+export const PROJECT_SUSD: { [chainId in ChainId]?: string } = {
+  [ChainId.MATIC_TESTNET]: '0xdfA2469CBFD7A0AFd74fae5b50c02255391B21EC',
+  [ChainId.BSC_TESTNET]: '0x79FFbf404082F458432330aee16959C7FD05484c',
+}
+export const PROJECT_BUSD: { [chainId in ChainId]?: string } = {
+  [ChainId.MATIC_TESTNET]: '0x761EaaE4CDF672da139aba3f9C32A987117C2142',
+  [ChainId.BSC_TESTNET]: '0x75CC5922d9B577d23447a81F80767816115f5364',
+}
 
 export * from './routing'
 export * from './tokens'

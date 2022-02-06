@@ -28,7 +28,13 @@ module.exports = withBundleAnalyzer(
       disable: process.env.NODE_ENV === 'development',
     },
     images: {
-      domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
+      domains: [
+        'assets.sushi.com',
+        'res.cloudinary.com',
+        'raw.githubusercontent.com',
+        'logos.covalenthq.com',
+        'objectstorage.us-phoenix-1.oraclecloud.com',
+      ],
     },
     reactStrictMode: true,
     async redirects() {
@@ -147,6 +153,10 @@ module.exports = withBundleAnalyzer(
         {
           source: '/projects/pp1',
           destination: '/projects/pp1',
+        },
+        {
+          source: '/projects/pp2',
+          destination: '/projects/pp2',
         },
         {
           source: '/deposit/:token*',

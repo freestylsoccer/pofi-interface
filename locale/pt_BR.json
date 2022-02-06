@@ -382,6 +382,7 @@
   "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review": "Ao criar um par, você é o primeiro provedor de liquidez. A proporção de tokens que você adiciona definirá o preço deste pool. Quando estiver satisfeito com a taxa, clique em \"supply to review\"",
   "Withdraw": "Retirar",
   "Withdraw {0} {1}": "",
+  "Withdrawing {0} {1}": "",
   "Wrap": "Wrap",
   "Wrong Network": "Rede Errada",
   "Yesterday's APR": "APR de ontem",

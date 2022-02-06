@@ -1510,4 +1510,9 @@ input:focus {
     padding-bottom: 0.75rem;
   }
 
+  .id-ref-sections {
+    --h-header: 50px;
+    scroll-margin-top: calc(var(--h-header) + 5.5em);
+  }
+
 }

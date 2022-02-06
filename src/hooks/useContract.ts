@@ -167,12 +167,12 @@ export function useMulticall2Contract() {
 
 export function useDataProviderContract() {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId && PROTOCOL_DATA_PROVIDER_ADDRESS, PROTOCOL_DATA_PROVIDER_ABI, false)
+  return useContract(chainId && PROTOCOL_DATA_PROVIDER_ADDRESS[chainId], PROTOCOL_DATA_PROVIDER_ABI, false)
 }
 
 export function useUiPoolDataProvider() {
   const { chainId } = useActiveWeb3React()
-  return useContract(UI_POOL_DATA_PROVIDER, UI_POOL_DATA_PROVIDER_ABI, false)
+  return useContract(UI_POOL_DATA_PROVIDER[chainId], UI_POOL_DATA_PROVIDER_ABI, false)
 }
 
 export function useSushiContract(withSignerIfPossible = true): Contract | null {
@@ -200,7 +200,7 @@ export function useFactoryContract(): Contract | null {
 
 export function useRouterContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(LENDING_POOL_ADDRESS, LENDING_POOL_ABI, true)
+  return useContract(LENDING_POOL_ADDRESS[chainId], LENDING_POOL_ABI, true)
 }
 /*
 export function useRouterContract(): Contract | null {

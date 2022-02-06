@@ -46,14 +46,14 @@ export function ConfirmAddModalBottom({
         <div className="flex items-center justify-between">
           <div className="text-sm text-high-emphesis">{i18n._(t`Deposit rate`)}</div>
           <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
-            {`${formatBigNumberToFixed(liquidityRate, 0, 25)}% `}
+            {`${formatBigNumberToFixed(liquidityRate, 1, 25)}% `}
             {/* original value 1e27 but using 25 decimal to get the value on % */}
           </div>
         </div>
         <div className="flex items-center justify-between pb-6">
           <div className="text-sm text-high-emphesis">{i18n._(t`Borrow rate`)}</div>
           <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
-            {`${formatBigNumberToFixed(stableBorrowRate, 0, 25)}% `}
+            {`${formatBigNumberToFixed(stableBorrowRate, 1, 25)}% `}
             {/* original value 1e27 but using 25 decimal to get the value on % */}
           </div>
         </div>

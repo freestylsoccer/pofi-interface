@@ -382,6 +382,7 @@
   "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review": "Khi tạo một cặp, bạn là nhà cung cấp thanh khoản đầu tiên. Tỷ lệ token bạn thêm vào sẽ thiết lập giá của mạng lưới này. Khi bạn hài lòng với tỷ lệ, hãy nhấp vào tổng cung để xem xét",
   "Withdraw": "Rút tiền",
   "Withdraw {0} {1}": "",
+  "Withdrawing {0} {1}": "",
   "Wrap": "Bọc lại",
   "Wrong Network": "Mạng không chính xác",
   "Yesterday's APR": "Tỷ suất lợi nhuận hàng năm của ngày hôm qua",

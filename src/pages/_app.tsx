@@ -115,7 +115,7 @@ function MyApp({
           name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
         />
-        <title key="title">POFI</title>
+        <title key="title">Pofi Investments</title>
 
         <meta
           key="description"
@@ -123,10 +123,10 @@ function MyApp({
           content="Invest your crypto in Real Estate projects, Easy and Secure. Welcome to Pofi Investments"
         />
 
-        <meta name="application-name" content="SUSHI App" />
+        <meta name="application-name" content="Pofi App" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="SUSHI App" />
+        <meta name="apple-mobile-web-app-title" content="Pofi App" />
 
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
@@ -135,7 +135,7 @@ function MyApp({
         <meta name="theme-color" content="#F338C3" />
 
         <meta key="twitter:card" name="twitter:card" content="app" />
-        <meta key="twitter:title" name="twitter:title" content="SUSHI App" />
+        <meta key="twitter:title" name="twitter:title" content="Pofi App" />
         <meta key="twitter:url" name="twitter:url" content="https://app.sushi.com" />
         <meta
           key="twitter:description"

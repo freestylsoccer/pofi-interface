@@ -382,6 +382,7 @@
   "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review": "जोड़ी बनाते समय पहले आप लिक्विडिटी प्रदाता होते हैं। आपके द्वारा जोड़े गए टोकन का अनुपात इस पूल की कीमत निर्धारित करेगा। जब आप दर से संतुष्ट हैं, तो समीक्षा करने के लिए आपूर्ति पर क्लिक करें",
   "Withdraw": "वापस निकालना",
   "Withdraw {0} {1}": "",
+  "Withdrawing {0} {1}": "",
   "Wrap": "सम्मिलित करें",
   "Wrong Network": "गलत नेटवर्क",
   "Yesterday's APR": "कल का APR",

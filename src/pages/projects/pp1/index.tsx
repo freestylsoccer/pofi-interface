@@ -13,6 +13,8 @@ import { PROJECT_USDT } from '../../../constants'
 import { useReserveData } from '../../../state/reserve/hooks'
 import { formatBigNumberToFixed } from '../../../utils/formatBalance'
 import { useToken } from '../../../hooks/Tokens'
+import { Accordion } from '../../../components/Accordion'
+import Image from '../../../components/Image'
 
 const elements = [
   {
@@ -42,7 +44,7 @@ export default function Theter() {
   // get reserve data info
   const [data] = useReserveData(PROJECT_USDT[chainId])
   const undelayingAsset = useToken(getUsdtAddress())
-  const reserveData = data?.reserveData[0].result
+  const reserveData = data?.reserveData?.[0]?.result
   const liquidityRate = reserveData?.liquidityRate
   const availableLiquidity = reserveData?.availableLiquidity
   const totalStableDebt = reserveData?.totalStableDebt
@@ -51,10 +53,73 @@ export default function Theter() {
   const maxAmount = 250000
   const [amount, setAmount] = useState(100)
   const [months, setMonths] = useState(1)
-  const apr = formatBigNumberToFixed(liquidityRate || '0x00', 3, 27)
+  const apr = formatBigNumberToFixed(liquidityRate || '26620662604792817431430767312896', 3, 27)
 
   const roi = amount * (((months + 2) * parseFloat(apr)) / 12)
   // const comission = ((((amount*0.01)/12) * (months+2)) + ((((amount*0.01)/12) * (months+2))*0.16) + (roi*0.01) + ((roi*0.01)*0.16))
+
+  const faq = [
+    {
+      title: 'What is the RealtyMogul Income REIT?',
+      content:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit nesciunt beatae debitis delectus pariatur nostrum maiores magni quibusdam officia tempore quis ea molestiae ducimus error nemo, tenetur possimus, earum illo.',
+    },
+    {
+      title: "What are the differences between RealtyMogul's Income REIT and Apartment Growth REIT?",
+      content:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit nesciunt beatae debitis delectus pariatur nostrum maiores magni quibusdam officia tempore quis ea molestiae ducimus error nemo, tenetur possimus, earum illo. Impedit nesciunt beatae debitis delectus pariatur nostrum maiores magni quibusdam officia tempore quis ea molestiae ducimus error nemo, tenetur possimus, earum illo.',
+    },
+    {
+      title: 'How is the purchase price determined?',
+      content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+    },
+    {
+      title: 'How often will I receive distributions?',
+      content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+    },
+    {
+      title: 'What is the Automatic Investment Program?',
+      content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+    },
+    {
+      title: 'What fees and expenses will the REIT pay?',
+      content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+    },
+    {
+      title: "What is the REIT's exit strategy?",
+      content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+    },
+    {
+      title: 'Am I eligible to invest?',
+      content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+    },
+    {
+      title: 'What will the REIT invest in?',
+      content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+    },
+  ]
+
+  const details = [
+    {
+      title: 'Capital structure',
+      content:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit nesciunt beatae debitis delectus pariatur nostrum maiores magni quibusdam officia tempore quis ea molestiae ducimus error nemo, tenetur possimus, earum illo.',
+    },
+    {
+      title: 'Location',
+      content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+    },
+    {
+      title: 'Project managers',
+      content:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit nesciunt beatae debitis delectus pariatur nostrum maiores magni quibusdam officia tempore quis ea molestiae ducimus error nemo, tenetur possimus, earum illo.',
+    },
+    {
+      title: 'About eveloper',
+      content:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit nesciunt beatae debitis delectus pariatur nostrum maiores magni quibusdam officia tempore quis ea molestiae ducimus error nemo, tenetur possimus, earum illo. Impedit nesciunt beatae debitis delectus pariatur nostrum maiores magni quibusdam officia tempore quis ea molestiae ducimus error nemo, tenetur possimus, earum illo.',
+    },
+  ]
 
   return (
     <Container id="pp1-page" className="py-20 md:py-12 lg:py-20" maxWidth="full">
@@ -124,16 +189,16 @@ export default function Theter() {
         </div>
       </div>
 
-      <div className="content-between justify-center hidden mx-5 NnZDJ sm:flex">
+      <div className="pt-2 content-between justify-center hidden mx-5 NnZDJ sm:flex">
         <nav className="py-2.5 bg-gray-700 border-gray-200 dark:bg-gray-800">
           <NavLink href="#Overview">
             <a className="py-2.5 flex-auto px-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis lg:px-5 xl:px-8  whitespace-nowrap">
               Overview
             </a>
           </NavLink>
-          <NavLink href="#Strategy">
+          <NavLink href="#Details">
             <a className="py-2.5 flex-auto px-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis lg:px-5 xl:px-8  whitespace-nowrap">
-              Strategy
+              Details
             </a>
           </NavLink>
           <NavLink href="#Performance">
@@ -186,7 +251,7 @@ export default function Theter() {
         </nav>
       </div>
 
-      <div className="px-4 py-4 md:px-8 id-ref-sections" id="Overview">
+      <div className="px-4 py-4 md:py-12 md:px-8 id-ref-sections" id="Overview">
         <div className="fuJzBa">
           <div className="PTitle">Overview</div>
           <div className="esEBud">
@@ -201,8 +266,9 @@ export default function Theter() {
             </div>
             <div className="dAORTk">
               <div className="fMTQqS">
-                <img
-                  className="iYdxMO"
+                <Image
+                  width="100px"
+                  height="100px"
                   src="https://objectstorage.us-phoenix-1.oraclecloud.com/n/axdbiqmjmklf/b/bucket-20211203-1943/o/svg%2Fdistribution.svg"
                   alt=""
                 />
@@ -213,12 +279,15 @@ export default function Theter() {
                   } Since inception, MogulREIT I has distributed 57 consecutive months of distributions to investors totaling approximately $15.7 million.`}
                 </p>
               </div>
-              <div className="duLoRX">
-                <img
-                  className="iYdxMO"
-                  src="https://objectstorage.us-phoenix-1.oraclecloud.com/n/axdbiqmjmklf/b/bucket-20211203-1943/o/svg%2Fdiversification.svg"
-                  alt=""
-                />
+              <div className="duLoRX iYdxMO">
+                <div className="flex content-center">
+                  <Image
+                    width="100%"
+                    height="100%"
+                    src="https://objectstorage.us-phoenix-1.oraclecloud.com/n/axdbiqmjmklf/b/bucket-20211203-1943/o/svg%2Fdiversification.svg"
+                    alt=""
+                  />
+                </div>
                 <p className="PImgColTitle">Currently Deposited</p>
                 <p className="PImgColSubtitle">
                   {`${formatBigNumberToFixed(reserveSize || '0x00', 2, undelayingAsset?.decimals)} ${
@@ -226,12 +295,15 @@ export default function Theter() {
                   } Broad selection of investments across property types and geographies designed to reduce risk.`}
                 </p>
               </div>
-              <div className="jGshr">
-                <img
-                  className="iYdxMO"
-                  src="https://objectstorage.us-phoenix-1.oraclecloud.com/n/axdbiqmjmklf/b/bucket-20211203-1943/o/svg%2Fincome.svg"
-                  alt=""
-                />
+              <div className="jGshr iYdxMO">
+                <div className="flex content-center">
+                  <Image
+                    width="100%"
+                    height="100%"
+                    src="https://objectstorage.us-phoenix-1.oraclecloud.com/n/axdbiqmjmklf/b/bucket-20211203-1943/o/svg%2Fincome.svg"
+                    alt=""
+                  />
+                </div>
                 <p className="PImgColTitle">Distribution</p>
                 <p className="PImgColSubtitle">
                   Quarterly Cash flow from debt and equity investments in commercial real estate properties.
@@ -242,9 +314,18 @@ export default function Theter() {
         </div>
       </div>
 
-      <div className="container max-w-3xl mx-auto id-ref-sections" id="Strategy">
+      <div className="p-3 py-4 md:py-12 container max-w-3xl mx-auto id-ref-sections" id="Details">
+        <div className="container mx-auto px-3">
+          <div className="PTitle">Details</div>
+          {details.map((item) => (
+            <Accordion title={item.title} content={item.content} key={item.title} />
+          ))}
+        </div>
+      </div>
+
+      <div className="py-4 md:py-12 container max-w-3xl mx-auto id-ref-sections" id="Performance">
         <div className="justify-center flex-auto">
-          <div className="PTitle">Calculator</div>
+          <div className="PTitle">Performance calculator</div>
           <div className="px-5">
             <div className="pt-3">
               <p className="font-bold">1. Elige el monto a invertir</p>
@@ -300,7 +381,7 @@ export default function Theter() {
         </div>
       </div>
 
-      <div className="container mx-auto text-center id-ref-sections" id="Performance">
+      <div className="py-4 md:py-12 container max-w-3xl mx-auto text-center id-ref-sections">
         <div className="p-3">
           <div className="flex justify-center mt-4">
             <table className="w-11/12 md:w-5/12">
@@ -317,7 +398,7 @@ export default function Theter() {
                     ${roi.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                   </td>
                 </tr>
-                <tr className="">
+                <tr>
                   <td className="TdTextLeft">Total</td>
                   <td className="TdTextRight">
                     ${(amount + roi).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
@@ -333,7 +414,7 @@ export default function Theter() {
                   <td className="TdTextLeft">Comisión pofi investments*</td>
                   <td className="TdTextRight">${comission.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
                 </tr>*/}
-                <tr className="">
+                <tr>
                   <td className="TdTextLeft">A recibir</td>
                   <td className="TdTextRight">
                     ${(roi - roi * 0.2).toLocaleString('en-Us', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
@@ -343,9 +424,10 @@ export default function Theter() {
             </table>
           </div>
           <div className="flex justify-center mt-4">
-            <img
+            <Image
               src="https://objectstorage.us-phoenix-1.oraclecloud.com/n/axdbiqmjmklf/b/bucket-20211203-1943/o/svg%2Fearn.svg"
               width="223"
+              height="100%"
               alt="earn"
             />
           </div>
@@ -380,6 +462,105 @@ export default function Theter() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div
+        className="py-4 md:py-12 container px-4 py-4 max-w-3xl mx-auto id-ref-sections text-center shadow-lg"
+        id="Resources"
+      >
+        <div className="PTitle">Resources</div>
+        <ul className="divide-y divide-gray-400 divide-opacity-25">
+          <li className="flex justify-between p-3 hover:bg-blue-600 hover:text-blue-200">
+            Offering Circular
+            <span className="flex">
+              <DocumentTextIcon width="24" height="24" />
+              Download PDF
+            </span>
+          </li>
+          <li className="flex justify-between p-3 hover:bg-blue-600 hover:text-blue-200">
+            Document X
+            <span className="flex">
+              <DocumentTextIcon width="24" height="24" />
+              Download PDF
+            </span>
+          </li>
+          <li className="flex items-center justify-between p-3 hover:bg-blue-600 hover:text-blue-200">
+            Document Y
+            <span className="flex">
+              <DocumentTextIcon width="24" height="24" />
+              Download PDF
+            </span>
+          </li>
+          <li className="flex items-center justify-between p-3 hover:bg-blue-600 hover:text-blue-200">
+            Document Z
+            <span className="flex">
+              <DocumentTextIcon width="24" height="24" />
+              Download PDF
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div className="py-4 md:py-12 container px-4 py-4 max-w-3xl mx-auto id-ref-sections" id="FAQS">
+        <div className="container mx-auto">
+          <div className="PTitle">FAQ</div>
+          {faq.map((item) => (
+            <Accordion title={item.title} content={item.content} key={item.title} />
+          ))}
+        </div>
+      </div>
+
+      <div className="py-4 md:py-12 container px-4 py-4 max-w-3xl mx-auto">
+        <div className="PTitle">Disclaimers and Risk Factors</div>
+        <p className="text-justify text-primary">
+          Investing in the Companys common shares is speculative and involves substantial risks. The Company cannot
+          assure you that it will attain its objectives or that the value of its assets will not decrease. Therefore,
+          you should purchase these securities only if you can afford a complete loss of your investment.
+        </p>
+        <p className="text-justify text-primary py-4">
+          You should carefully review the “Risk Factors” section of this offering circular, beginning on page 26, which
+          contains a detailed discussion of the material risks that you should consider before you invest in our common
+          shares. These risks include the following:
+        </p>
+        <ul className="pl-6 md:pl-12 text-primary">
+          <li className="list-disc">The RealtyMogul Income REIT has limited operating history.</li>
+          <li className="list-disc">
+            Because no public trading market for shares of our common stock currently exists, it will be difficult for
+            an investor to sell their shares and, if an investor is able to sell their shares, they will likely sell
+            them at a substantial discount to the public offering price.
+          </li>
+          <li className="list-disc">
+            We may be unable to pay or maintain cash distributions or increase distributions over time.
+          </li>
+          <li className="list-disc">
+            The REITs ability to implement its investment strategy is dependent, in part, upon its ability to
+            successfully conduct this offering through the Realty Mogul Platform, which makes an investment in it more
+            speculative.
+          </li>
+          <li className="list-disc">
+            Future disruptions in the financial markets or deteriorating economic conditions could adversely impact the
+            commercial real estate market as well as the market for debt-related investments generally, which could
+            hinder our ability to implement our business strategy and generate returns to you.
+          </li>
+          <li className="list-disc">
+            This is a blind pool offering, and the REIT is not committed to acquiring any particular investments with
+            the net proceeds of this offering.
+          </li>
+          <li className="list-disc">
+            There are conflicts of interest between the REIT, its Manager and its affiliates.
+          </li>
+          <li className="list-disc">Our investments may be concentrated and will be subject to risk of default.</li>
+          <li className="list-disc">
+            We are dependent on our Manager and Realty Mogul, Cos key personnel for our success.
+          </li>
+          <li className="list-disc">
+            Failure to qualify as a REIT would cause the Company to be taxed as a regular corporation, which would
+            substantially reduce funds available for distributions to our shareholders.
+          </li>
+          <li className="list-disc">
+            The REIT may allocate the net proceeds from this offering to investments with which you may not agree.
+          </li>
+        </ul>
       </div>
     </Container>
   )

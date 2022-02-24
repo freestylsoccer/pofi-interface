@@ -1,16 +1,12 @@
-import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { AutoRow, RowBetween, RowCenter } from '../../components/Row'
 import Button, { ButtonError } from '../../components/Button'
-import { Currency, CurrencyAmount, Percent, WNATIVE, currencyEquals } from '@sushiswap/sdk'
-import { ONE_BIPS, ZERO_PERCENT } from '../../constants'
-import React, { useCallback, useState, useMemo } from 'react'
+import { Currency, CurrencyAmount } from '@sushiswap/sdk'
+import React, { useCallback, useState } from 'react'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../modals/TransactionConfirmationModal'
-import { calculateGasMargin, calculateSlippageAmount } from '../../functions/trade'
-import { currencyId, maxAmountSpend } from '../../functions/currency'
+import { calculateGasMargin } from '../../functions/trade'
+import { maxAmountSpend } from '../../functions/currency'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
-import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../../state/user/hooks'
+import { useExpertModeManager } from '../../state/user/hooks'
 
-import { AddRemoveTabs } from '../../components/NavigationTabs'
 import Alert from '../../components/Alert'
 import { AutoColumn } from '../../components/Column'
 import { BigNumber } from '@ethersproject/bignumber'
@@ -18,22 +14,13 @@ import { ConfirmRemoveModalBottom } from '../../features/liquidity/ConfirmRemove
 import Container from '../../components/Container'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import CurrencyLogo from '../../components/CurrencyLogo'
-import Dots from '../../components/Dots'
-import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import DoubleGlowShadow from '../../components/DoubleGlowShadow'
-import ExchangeHeader from '../../components/ExchangeHeader'
 import { Field } from '../../state/mint/actions'
 import Head from 'next/head'
 import LiquidityHeader from '../../features/liquidity/LiquidityHeader'
-import LiquidityPrice from '../../features/liquidity/LiquidityPrice'
-import { MinimalPositionCard } from '../../components/PositionCard'
-import NavLink from '../../components/NavLink'
 import { PairState } from '../../hooks/useV2Pairs'
-import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'
 import { TransactionResponse } from '@ethersproject/providers'
-import Typography from '../../components/Typography'
-import UnsupportedCurrencyFooter from '../../features/swap/UnsupportedCurrencyFooter'
 import Web3Connect from '../../components/Web3Connect'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
@@ -44,13 +31,7 @@ import { useRouter } from 'next/router'
 import { useRouterContract } from '../../hooks'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
-import { useWalletModalToggle } from '../../state/application/hooks'
 import Back from '../../components/Back'
-import { useContract } from '../../hooks'
-import { MINTABLE_ERC20 } from '../../constants/abis/erc20'
-import { useProtocolDataWithRpc } from '../../features/farm/hooks'
-
-const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
 export default function Withdraw() {
   const { i18n } = useLingui()
@@ -62,37 +43,16 @@ export default function Withdraw() {
 
   const currencyA = useCurrency(currencyIdA) // aToken
   const currencyB = useCurrency(currencyIdB) // underlyingAsset
-  // const currencyC = useCurrency(currencyIdC) // project
-  // console.log(currencyIdA)
-  const oneCurrencyIsWETH = Boolean(
-    chainId &&
-      ((currencyA && currencyEquals(currencyA, WNATIVE[chainId])) ||
-        (currencyB && currencyEquals(currencyB, WNATIVE[chainId])))
-  )
-
-  const toggleWalletModal = useWalletModalToggle() // toggle wallet when disconnected
 
   const [isExpertMode] = useExpertModeManager()
 
   // mint state
   const { independentField, typedValue, otherTypedValue } = useMintState()
-  const {
-    dependentField,
-    currencies,
-    pair,
-    pairState,
-    currencyBalances,
-    parsedAmounts,
-    price,
-    noLiquidity,
-    liquidityMinted,
-    poolTokenPercentage,
-    error,
-  } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
+  const { dependentField, currencies, pair, pairState, currencyBalances, parsedAmounts, noLiquidity, error } =
+    useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
   // console.log(error)
-  // console.log(currencyBalances)
 
-  const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
+  const { onFieldAInput } = useMintActionHandlers(noLiquidity)
 
   const isValid = !error
 
@@ -103,11 +63,8 @@ export default function Withdraw() {
   // txn values
   const deadline = useTransactionDeadline() // custom from users settings
 
-  // const [allowedSlippage] = useUserSlippageTolerance(); // custom from users
-
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE) // custom from users
-
   const [txHash, setTxHash] = useState<string>('')
+  const [txtError, setTxtError] = useState<string>(undefined)
 
   // get formatted amounts
   const formattedAmounts = {
@@ -125,12 +82,7 @@ export default function Withdraw() {
     },
     {}
   )
-  const cont = useContract(currencyIdA, MINTABLE_ERC20)
-  async function mint() {
-    // console.log(cont)
-    await cont.mint('100000000')
-    console.log('minted.. ')
-  }
+
   const atMaxAmounts: { [field in Field]?: CurrencyAmount<Currency> } = [Field.CURRENCY_A, Field.CURRENCY_B].reduce(
     (accumulator, field) => {
       return {
@@ -142,9 +94,6 @@ export default function Withdraw() {
   )
 
   const routerContract = useRouterContract()
-
-  // check whether the user has approved the router on the tokens
-  const [approvalA, approveACallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], routerContract?.address)
 
   const addTransaction = useTransactionAdder()
 
@@ -195,6 +144,7 @@ export default function Withdraw() {
         // we only care if the error is something _other_ than the user rejected the tx
         if (error?.code !== 4001) {
           console.error(error)
+          setTxtError(error.message)
         }
       })
   }
@@ -222,47 +172,11 @@ export default function Withdraw() {
   }
 
   const modalBottom = () => {
-    return (
-      <ConfirmRemoveModalBottom
-        price={price}
-        currencies={currencies}
-        parsedAmounts={parsedAmounts}
-        noLiquidity={noLiquidity}
-        onWithdraw={onWithdraw}
-        poolTokenPercentage={poolTokenPercentage}
-      />
-    )
+    return <ConfirmRemoveModalBottom onWithdraw={onWithdraw} />
   }
 
   const pendingText = i18n._(
     t`Withdrawing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencies[Field.CURRENCY_B]?.symbol}`
-  )
-
-  const handleCurrencyASelect = useCallback(
-    (currencyA: Currency) => {
-      const newCurrencyIdA = currencyId(currencyA)
-      if (newCurrencyIdA === currencyIdB) {
-        router.push(`/add/${currencyIdB}/${currencyIdA}`)
-      } else {
-        router.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
-      }
-    },
-    [currencyIdB, router, currencyIdA]
-  )
-  const handleCurrencyBSelect = useCallback(
-    (currencyB: Currency) => {
-      const newCurrencyIdB = currencyId(currencyB)
-      if (currencyIdA === newCurrencyIdB) {
-        if (currencyIdB) {
-          router.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
-        } else {
-          router.push(`/add/${newCurrencyIdB}`)
-        }
-      } else {
-        router.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
-      }
-    },
-    [currencyIdA, router, currencyIdB]
   )
 
   const handleDismissConfirmation = useCallback(() => {
@@ -283,7 +197,7 @@ export default function Withdraw() {
   return (
     <>
       <Head>
-        <title>Add Liquidity | Sushi</title>
+        <title>Withdraw | Pofi</title>
         <meta
           key="description"
           name="description"
@@ -318,8 +232,6 @@ export default function Withdraw() {
 
         <DoubleGlowShadow>
           <div className="p-4 space-y-4 rounded bg-dark-900" style={{ zIndex: 1 }}>
-            {/* <AddRemoveTabs creating={isCreate} adding={true} defaultSlippage={DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE} /> */}
-
             <TransactionConfirmationModal
               isOpen={showConfirm}
               onDismiss={handleDismissConfirmation}
@@ -334,6 +246,7 @@ export default function Withdraw() {
                 />
               )}
               pendingText={pendingText}
+              error={txtError}
             />
             <div className="flex flex-col space-y-4">
               {pair && pairState !== PairState.INVALID && (
@@ -352,7 +265,6 @@ export default function Withdraw() {
                   onMax={() => {
                     onFieldAInput(maxAmounts[Field.CURRENCY_A]?.toExact() ?? '')
                   }}
-                  onCurrencySelect={handleCurrencyASelect}
                   showMaxButton={!atMaxAmounts[Field.CURRENCY_A]}
                   currency={currencies[Field.CURRENCY_A]}
                   id="add-liquidity-input-tokena"
@@ -371,28 +283,7 @@ export default function Withdraw() {
               ) : (
                 (isValid || !!error) && (
                   <AutoColumn gap={'md'}>
-                    {/*
-                      <RowCenter>
-                        {(approvalA !== ApprovalState.APPROVED) && (approvalA !== ApprovalState.UNKNOWN) && (
-                          <Button
-                            color="gradient"
-                            size="lg"
-                            onClick={approveACallback}
-                            disabled={approvalA === ApprovalState.PENDING || !!error}
-                            style={{
-                              width: '48%',
-                            }}
-                          >
-                            {approvalA === ApprovalState.PENDING ? (
-                              <Dots>{i18n._(t`Approving ${currencies[Field.CURRENCY_A]?.symbol}`)}</Dots>
-                            ) : (
-                              error ?? i18n._(t`Approve ${currencies[Field.CURRENCY_A]?.symbol}`)
-                            )}
-                          </Button>
-                        )}                        
-                      </RowCenter> */}
-
-                    {formattedAmounts[Field.CURRENCY_A] != '' && (
+                    {formattedAmounts[Field.CURRENCY_A] !== undefined && currencyBalances.CURRENCY_A && (
                       <ButtonError
                         onClick={() => {
                           isExpertMode ? onWithdraw() : setShowConfirm(true)
@@ -407,17 +298,6 @@ export default function Withdraw() {
                 )
               )}
             </div>
-
-            {!addIsUnsupported ? (
-              pair && !noLiquidity && pairState !== PairState.INVALID ? (
-                <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
-              ) : null
-            ) : (
-              <UnsupportedCurrencyFooter
-                show={addIsUnsupported}
-                currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]}
-              />
-            )}
           </div>
         </DoubleGlowShadow>
       </Container>

@@ -20,6 +20,7 @@ export default function Dashboard(): JSX.Element {
 
   const { user: userReserves } = useProtocolDataWithRpc()
   // console.log(userReserves);
+  // maybe the ptoken mint amount must be the real amount not the scaled amount
   // console.log(reservesData);
   // console.log(isUserHasDeposits);
 
@@ -65,7 +66,7 @@ export default function Dashboard(): JSX.Element {
               To see your deposited / borrowed assets, you need to connect your wallet.{' '}
             </div>
             <div className="flex justify-center">
-              <Web3Connect size="lg" color="gradient" className="md:w-1/6" />
+              <Web3Connect size="lg" color="gradient" />
             </div>
           </div>
         )}

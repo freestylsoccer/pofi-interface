@@ -241,7 +241,7 @@ input:focus {
   .fTHuJT {
     width: 100%;
     display: block;
-    position: static;
+    position: relative;
     inset: auto;
     transition: filter 0.2s linear 0s;
     z-index: auto;
@@ -1089,7 +1089,7 @@ input:focus {
     z-index: auto;
   }
   .dAORTk {
-    margin: 10px 40px 40px;
+    margin: 0.625rem 2rem 2rem;
     width: 100%;
     flex-direction: column;
     justify-content: space-around;
@@ -1104,21 +1104,21 @@ input:focus {
     .dAORTk {
         flex-direction: column;
         width: 100%;
-        margin-top: 20px;
+        margin-top: 1.25rem;
     }
   }
   @media screen and (min-width: 832px) {
     .dAORTk {
         flex-direction: row;
         width: 100%;
-        margin-top: 40px;
+        margin-top: 2rem;
     }
   }
   @media screen and (min-width: 1024px) {
     .dAORTk {
         flex-direction: row;
         width: 100%;
-        margin-top: 50px;
+        margin-top: 2.5rem;
     }
   }
   .fMTQqS {
@@ -1136,7 +1136,7 @@ input:focus {
     box-sizing: border-box;
     position: static;
     opacity: 1;
-    transition: opacity 75ms linear 75ms;
+    transition: opacity 75ms linear 150ms;
     z-index: auto;
   }
   .iYdxMO {

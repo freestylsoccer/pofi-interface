@@ -34,7 +34,7 @@ const toBase64 = (str) => (typeof window === 'undefined' ? Buffer.from(str).toSt
 const Image = ({ src, width = undefined, height = undefined, layout = undefined, loader = undefined, ...rest }) => {
   const useBlur = parseInt(String(height), 10) >= 40 && parseInt(String(width), 10) >= 40
   return (
-    <div style={{ width, height }} className="overflow-hidden rounded">
+    <div style={{ width, height }} className="overflow-hidden">
       {useBlur ? (
         <NextImage
           loader={loader}

@@ -1,13 +1,13 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import { RowCenter } from '../../components/Row'
 import Button, { ButtonError } from '../../components/Button'
-import { Currency, CurrencyAmount, Percent, WNATIVE, currencyEquals } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount } from '@sushiswap/sdk'
 import React, { useCallback, useState } from 'react'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../modals/TransactionConfirmationModal'
 import { calculateGasMargin } from '../../functions/trade'
-import { currencyId, maxAmountSpend } from '../../functions/currency'
+import { maxAmountSpend } from '../../functions/currency'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
-import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../../state/user/hooks'
+import { useExpertModeManager } from '../../state/user/hooks'
 
 import Alert from '../../components/Alert'
 import { AutoColumn } from '../../components/Column'
@@ -21,12 +21,9 @@ import DoubleGlowShadow from '../../components/DoubleGlowShadow'
 import { Field } from '../../state/mint/actions'
 import Head from 'next/head'
 import LiquidityHeader from '../../features/liquidity/LiquidityHeader'
-import LiquidityPrice from '../../features/liquidity/LiquidityPrice'
-import { MinimalPositionCard } from '../../components/PositionCard'
 import { PairState } from '../../hooks/useV2Pairs'
 import ReactGA from 'react-ga'
 import { TransactionResponse } from '@ethersproject/providers'
-import UnsupportedCurrencyFooter from '../../features/swap/UnsupportedCurrencyFooter'
 import Web3Connect from '../../components/Web3Connect'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
@@ -38,13 +35,8 @@ import { useRouterContract } from '../../hooks'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 import Back from '../../components/Back'
-import { useContract } from '../../hooks'
-import { MINTABLE_ERC20 } from '../../constants/abis/erc20'
-import { useProtocolDataWithRpc } from '../../features/farm/hooks'
 
-const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
-
-export default function Add() {
+export default function Repay() {
   const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
   const router = useRouter()
@@ -53,12 +45,6 @@ export default function Add() {
 
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
-
-  const oneCurrencyIsWETH = Boolean(
-    chainId &&
-      ((currencyA && currencyEquals(currencyA, WNATIVE[chainId])) ||
-        (currencyB && currencyEquals(currencyB, WNATIVE[chainId])))
-  )
 
   const [isExpertMode] = useExpertModeManager()
 
@@ -78,36 +64,11 @@ export default function Add() {
     error,
   } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
 
-  // get reserve data info
-  const { reserves: reservesData } = useProtocolDataWithRpc()
-  const type = router.query.filter == null ? 'current' : (router.query.filter as string)
-
-  const FILTER = {
-    all: (reserve) => reserve.projectStatus === true,
-    current: (reserve) =>
-      reserve?.project === currencyIdB.toLocaleLowerCase() &&
-      reserve?.underlyingAsset === currencyIdA.toLocaleLowerCase(),
-  }
-
-  const reserve = reservesData?.filter((reserve) => {
-    return type in FILTER ? FILTER[type](reserve) : true
-  })
-
-  const availableLiquidity =
-    reserve?.[0]?.availableLiquidity === undefined
-      ? BigNumber.from(0)
-      : BigNumber.from(reserve?.[0]?.availableLiquidity)
-  const totalPrincipalStableDebt =
-    reserve?.[0]?.totalPrincipalStableDebt === undefined
-      ? BigNumber.from(0)
-      : BigNumber.from(reserve?.[0]?.totalPrincipalStableDebt)
-  const reserveSize = availableLiquidity?.add(totalPrincipalStableDebt)
-
   // console.log(reserve[0].projectLiquidityRate)
   // console.log(reserveSize)
   // console.log(formatBigNumberToFixed(liquidityRate, 1, 27)) 1545962.23586 + 10900.0001 + 1464700.7769
 
-  const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
+  const { onFieldAInput } = useMintActionHandlers(noLiquidity)
 
   const isValid = !error
 
@@ -117,10 +78,6 @@ export default function Add() {
 
   // txn values
   const deadline = useTransactionDeadline() // custom from users settings
-
-  // const [allowedSlippage] = useUserSlippageTolerance(); // custom from users
-
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE) // custom from users
 
   const [txHash, setTxHash] = useState<string>('')
 
@@ -140,12 +97,7 @@ export default function Add() {
     },
     {}
   )
-  const cont = useContract(currencyIdA, MINTABLE_ERC20)
-  async function mint() {
-    // console.log(cont)
-    await cont.mint('100000000000')
-    console.log('minted.. ')
-  }
+
   const atMaxAmounts: { [field in Field]?: CurrencyAmount<Currency> } = [Field.CURRENCY_A, Field.CURRENCY_B].reduce(
     (accumulator, field) => {
       return {
@@ -176,8 +128,8 @@ export default function Add() {
       method: (...args: any) => Promise<TransactionResponse>,
       args: Array<string | string[] | number>,
       value: BigNumber | null
-    estimate = routerContract.estimateGas.deposit
-    method = routerContract.deposit
+    estimate = routerContract.estimateGas.repay
+    method = routerContract.repay
     args = [currencyIdB, currencyIdA, parsedAmountA.quotient.toString(), account]
     value = null
 
@@ -192,7 +144,7 @@ export default function Add() {
 
           addTransaction(response, {
             summary: i18n._(
-              t`Deposit ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(3)} ${currencies[Field.CURRENCY_A]?.symbol}`
+              t`Repay ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(3)} ${currencies[Field.CURRENCY_A]?.symbol}`
             ),
           })
 
@@ -200,7 +152,7 @@ export default function Add() {
 
           ReactGA.event({
             category: 'Liquidity',
-            action: 'Deposit',
+            action: 'Repay',
             label: [currencies[Field.CURRENCY_A]?.symbol].join('/'),
           })
         })
@@ -229,9 +181,6 @@ export default function Add() {
           {currencies[Field.CURRENCY_A]?.symbol}
           &nbsp;{i18n._(t`Tokens`)}
         </div>
-        <div className="pt-3 text-xs italic text-secondary">
-          {i18n._(t`The deposit rate can vary but can never be less than the initial defined rate.`)}
-        </div>
       </div>
     )
   }
@@ -245,50 +194,12 @@ export default function Add() {
         noLiquidity={noLiquidity}
         onAdd={onAdd}
         poolTokenPercentage={poolTokenPercentage}
-        liquidityRate={
-          reserve?.[0]?.liquidityRate === '0'
-            ? BigNumber.from(reserve?.[0]?.projectLiquidityRate)
-            : BigNumber.from(reserve?.[0]?.liquidityRate)
-        }
-        stableBorrowRate={
-          reserve?.[0]?.stableBorrowRate === '0'
-            ? BigNumber.from(reserve?.[0]?.projectBorrowRate)
-            : BigNumber.from(reserve?.[0]?.stableBorrowRate)
-        }
-        reserveSize={reserveSize}
       />
     )
   }
 
   const pendingText = i18n._(
-    t`Depositing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencies[Field.CURRENCY_A]?.symbol}`
-  )
-
-  const handleCurrencyASelect = useCallback(
-    (currencyA: Currency) => {
-      const newCurrencyIdA = currencyId(currencyA)
-      if (newCurrencyIdA === currencyIdB) {
-        router.push(`/add/${currencyIdB}/${currencyIdA}`)
-      } else {
-        router.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
-      }
-    },
-    [currencyIdB, router, currencyIdA]
-  )
-  const handleCurrencyBSelect = useCallback(
-    (currencyB: Currency) => {
-      const newCurrencyIdB = currencyId(currencyB)
-      if (currencyIdA === newCurrencyIdB) {
-        if (currencyIdB) {
-          router.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
-        } else {
-          router.push(`/add/${newCurrencyIdB}`)
-        }
-      } else {
-        router.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
-      }
-    },
-    [currencyIdA, router, currencyIdB]
+    t`Repaying ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencies[Field.CURRENCY_A]?.symbol}`
   )
 
   const handleDismissConfirmation = useCallback(() => {
@@ -309,7 +220,7 @@ export default function Add() {
   return (
     <>
       <Head>
-        <title>Add Liquidity | Sushi</title>
+        <title>Repay | Pofi</title>
         <meta
           key="description"
           name="description"
@@ -344,8 +255,6 @@ export default function Add() {
 
         <DoubleGlowShadow>
           <div className="p-4 space-y-4 rounded bg-dark-900" style={{ zIndex: 1 }}>
-            {/* <AddRemoveTabs creating={isCreate} adding={true} defaultSlippage={DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE} /> */}
-
             <TransactionConfirmationModal
               isOpen={showConfirm}
               onDismiss={handleDismissConfirmation}
@@ -353,7 +262,7 @@ export default function Add() {
               hash={txHash}
               content={() => (
                 <ConfirmationModalContent
-                  title={i18n._(t`You will deposit`)}
+                  title={i18n._(t`You will repay`)}
                   onDismiss={handleDismissConfirmation}
                   topContent={modalHeader}
                   bottomContent={modalBottom}
@@ -367,12 +276,7 @@ export default function Add() {
               )}
 
               <div>
-                <h2 className="pb-1 text-lg text-center">{i18n._(t`How much would you like to deposit?`)}</h2>
-                <div className="text-sm center">
-                  {i18n._(
-                    t`Please enter an amount you would like to deposit. The maximum amount you can deposit is shown below.`
-                  )}
-                </div>
+                <h2 className="pb-1 text-lg text-center">{i18n._(t`How much would you like to repay?`)}</h2>
               </div>
               {/*<Button
                 onClick={() => mint()}
@@ -386,26 +290,13 @@ export default function Add() {
                   onMax={() => {
                     onFieldAInput(maxAmounts[Field.CURRENCY_A]?.toExact() ?? '')
                   }}
-                  onCurrencySelect={handleCurrencyASelect}
                   showMaxButton={!atMaxAmounts[Field.CURRENCY_A]}
                   currency={currencies[Field.CURRENCY_A]}
                   id="add-liquidity-input-tokena"
                   showCommonBases
-                  customText={i18n._(t`Available to deposit`)}
+                  customText={i18n._(t`Available to repay`)}
                 />
               </div>
-
-              {currencies[Field.CURRENCY_A] && pairState !== PairState.INVALID && (
-                <div className="p-1 rounded bg-dark-800">
-                  <LiquidityPrice
-                    currencies={currencies}
-                    price={price}
-                    noLiquidity={noLiquidity}
-                    poolTokenPercentage={poolTokenPercentage}
-                    className="bg-dark-900"
-                  />
-                </div>
-              )}
 
               {addIsUnsupported ? (
                 <Button color="gradient" size="lg" disabled>
@@ -441,7 +332,7 @@ export default function Add() {
                       </RowCenter>
                     }
 
-                    {approvalA === ApprovalState.APPROVED && currencyBalances.CURRENCY_A && (
+                    {approvalA === ApprovalState.APPROVED && (
                       <ButtonError
                         onClick={() => {
                           isExpertMode ? onAdd() : setShowConfirm(true)

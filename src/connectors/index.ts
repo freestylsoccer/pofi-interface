@@ -18,7 +18,7 @@ const RPC = {
   [ChainId.FANTOM]: 'https://rpcapi.fantom.network',
   [ChainId.FANTOM_TESTNET]: 'https://rpc.testnet.fantom.network',
   [ChainId.MATIC]: 'https://polygon-rpc.com/',
-  [ChainId.MATIC_TESTNET]: 'https://rpc-mumbai.matic.today',
+  [ChainId.MATIC_TESTNET]: 'https://matic-mumbai.chainstacklabs.com',
   [ChainId.XDAI]: 'https://rpc.xdaichain.com',
   [ChainId.BSC]: 'https://bsc-dataseed.binance.org/',
   [ChainId.BSC_TESTNET]: 'https://data-seed-prebsc-1-s1.binance.org:8545',
@@ -47,7 +47,7 @@ export function getNetwork(defaultChainId, urls = RPC) {
 }
 
 export const network = new NetworkConnector({
-  defaultChainId: 1,
+  defaultChainId: 80001,
   urls: RPC,
 })
 

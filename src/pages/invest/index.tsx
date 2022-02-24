@@ -46,14 +46,14 @@ export default function Invest() {
                       </div>
                     </div>
                   </div>
-                  <div className="cjEsQP">
-                    <a className="cgTYkN" href="/investment-opportunity/193744">
-                      <img
-                        className="fTHuJT"
-                        src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1334&q=80"
-                        alt=""
-                      />
-                    </a>
+                  <div className="cjEsQP fTHuJT">
+                    <Image
+                      src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1334&q=80"
+                      alt=""
+                      width="100%"
+                      height="100%"
+                      layout="fill"
+                    />
                   </div>
                   <div className="hgjGUh">
                     <p className="hlWnwG">{i18n._(t`Open for investment`)}</p>
@@ -68,11 +68,6 @@ export default function Invest() {
                         <div className="ZLaWg">
                           <div className="gKEFyt">
                             <p className="ifjPnA">{i18n._(t`Quarterly`)}</p>
-                            <div className="iXKSiJ">
-                              <span>
-                                <img className="ClucN" src="/static/media/tooltip_icon.091e1161.svg" alt="" />
-                              </span>
-                            </div>
                           </div>
                           <p className="dLPGoD">{i18n._(t`Distributions`)}</p>
                         </div>
@@ -82,11 +77,6 @@ export default function Invest() {
                               <TrendingUpIcon width="24" height="24" />
                             </div>
                             <p className="iTWuKL">15.00%</p>
-                            <div className="iXKSiJ">
-                              <span>
-                                <img className="ClucN" src="/static/media/tooltip_icon.091e1161.svg" alt="" />
-                              </span>
-                            </div>
                           </div>
                           <p className="dLPGoD">{i18n._(t`Annualized Rate`)}</p>
                         </div>
@@ -132,12 +122,14 @@ export default function Invest() {
                       </div>
                     </div>
                   </div>
-                  <div className="cjEsQP">
+                  <div className="cjEsQP fTHuJT">
                     <a className="cgTYkN" href="/investment-opportunity/193744">
-                      <img
-                        className="fTHuJT"
+                      <Image
                         src="https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80"
                         alt=""
+                        width="100%"
+                        height="100%"
+                        layout="fill"
                       />
                     </a>
                   </div>
@@ -154,11 +146,6 @@ export default function Invest() {
                         <div className="ZLaWg">
                           <div className="gKEFyt">
                             <p className="ifjPnA">{i18n._(t`Monthly`)}</p>
-                            <div className="iXKSiJ">
-                              <span>
-                                <img className="ClucN" src="/static/media/tooltip_icon.091e1161.svg" alt="" />
-                              </span>
-                            </div>
                           </div>
                           <p className="dLPGoD">{i18n._(t`Distributions`)}</p>
                         </div>
@@ -168,11 +155,6 @@ export default function Invest() {
                               <TrendingUpIcon width="24" height="24" />
                             </div>
                             <p className="iTWuKL">6.00%</p>
-                            <div className="iXKSiJ">
-                              <span>
-                                <img className="ClucN" src="/static/media/tooltip_icon.091e1161.svg" alt="" />
-                              </span>
-                            </div>
                           </div>
                           <p className="dLPGoD">{i18n._(t`Annualized Rate`)}</p>
                         </div>
@@ -218,12 +200,14 @@ export default function Invest() {
                       </div>
                     </div>
                   </div>
-                  <div className="cjEsQP">
+                  <div className="cjEsQP fTHuJT">
                     <a className="cgTYkN" href="/investment-opportunity/193744">
-                      <img
-                        className="fTHuJT"
+                      <Image
                         src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80"
                         alt=""
+                        width="100%"
+                        height="100%"
+                        layout="fill"
                       />
                     </a>
                   </div>
@@ -240,11 +224,6 @@ export default function Invest() {
                         <div className="ZLaWg">
                           <div className="gKEFyt">
                             <p className="ifjPnA">{i18n._(t`Monthly`)}</p>
-                            <div className="iXKSiJ">
-                              <span>
-                                <img className="ClucN" src="/static/media/tooltip_icon.091e1161.svg" alt="" />
-                              </span>
-                            </div>
                           </div>
                           <p className="dLPGoD">{i18n._(t`Distributions`)}</p>
                         </div>
@@ -254,11 +233,6 @@ export default function Invest() {
                               <TrendingUpIcon width="24" height="24" />
                             </div>
                             <p className="iTWuKL">6.00%</p>
-                            <div className="iXKSiJ">
-                              <span>
-                                <img className="ClucN" src="/static/media/tooltip_icon.091e1161.svg" alt="" />
-                              </span>
-                            </div>
                           </div>
                           <p className="dLPGoD">{i18n._(t`Annualized Rate`)}</p>
                         </div>
@@ -304,12 +278,14 @@ export default function Invest() {
                       </div>
                     </div>
                   </div>
-                  <div className="cjEsQP">
+                  <div className="cjEsQP fTHuJT">
                     <a className="cgTYkN" href="/investment-opportunity/193744">
-                      <img
-                        className="fTHuJT"
+                      <Image
                         src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80"
                         alt=""
+                        width="100%"
+                        height="100%"
+                        layout="fill"
                       />
                     </a>
                   </div>
@@ -326,11 +302,6 @@ export default function Invest() {
                         <div className="ZLaWg">
                           <div className="gKEFyt">
                             <p className="ifjPnA">{i18n._(t`Monthly`)}</p>
-                            <div className="iXKSiJ">
-                              <span>
-                                <img className="ClucN" src="/static/media/tooltip_icon.091e1161.svg" alt="" />
-                              </span>
-                            </div>
                           </div>
                           <p className="dLPGoD">{i18n._(t`Distributions`)}</p>
                         </div>
@@ -340,11 +311,6 @@ export default function Invest() {
                               <TrendingUpIcon width="24" height="24" />
                             </div>
                             <p className="iTWuKL">6.00%</p>
-                            <div className="iXKSiJ">
-                              <span>
-                                <img className="ClucN" src="/static/media/tooltip_icon.091e1161.svg" alt="" />
-                              </span>
-                            </div>
                           </div>
                           <p className="dLPGoD">{i18n._(t`Annualized Rate`)}</p>
                         </div>
@@ -390,12 +356,14 @@ export default function Invest() {
                       </div>
                     </div>
                   </div>
-                  <div className="cjEsQP">
+                  <div className="cjEsQP fTHuJT">
                     <a className="cgTYkN" href="/investment-opportunity/193744">
-                      <img
-                        className="fTHuJT"
+                      <Image
                         src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80"
                         alt=""
+                        width="100%"
+                        height="100%"
+                        layout="fill"
                       />
                     </a>
                   </div>
@@ -412,11 +380,6 @@ export default function Invest() {
                         <div className="ZLaWg">
                           <div className="gKEFyt">
                             <p className="ifjPnA">{i18n._(t`Monthly`)}</p>
-                            <div className="iXKSiJ">
-                              <span>
-                                <img className="ClucN" src="/static/media/tooltip_icon.091e1161.svg" alt="" />
-                              </span>
-                            </div>
                           </div>
                           <p className="dLPGoD">{i18n._(t`Distributions`)}</p>
                         </div>
@@ -426,11 +389,6 @@ export default function Invest() {
                               <TrendingUpIcon width="24" height="24" />
                             </div>
                             <p className="iTWuKL">6.00%</p>
-                            <div className="iXKSiJ">
-                              <span>
-                                <img className="ClucN" src="/static/media/tooltip_icon.091e1161.svg" alt="" />
-                              </span>
-                            </div>
                           </div>
                           <p className="dLPGoD">{i18n._(t`Annualized Rate`)}</p>
                         </div>
@@ -476,12 +434,14 @@ export default function Invest() {
                       </div>
                     </div>
                   </div>
-                  <div className="cjEsQP">
+                  <div className="cjEsQP fTHuJT">
                     <a className="cgTYkN" href="/investment-opportunity/193744">
-                      <img
-                        className="fTHuJT"
+                      <Image
                         src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80"
                         alt=""
+                        width="100%"
+                        height="100%"
+                        layout="fill"
                       />
                     </a>
                   </div>
@@ -498,11 +458,6 @@ export default function Invest() {
                         <div className="ZLaWg">
                           <div className="gKEFyt">
                             <p className="ifjPnA">{i18n._(t`Monthly`)}</p>
-                            <div className="iXKSiJ">
-                              <span>
-                                <img className="ClucN" src="/static/media/tooltip_icon.091e1161.svg" alt="" />
-                              </span>
-                            </div>
                           </div>
                           <p className="dLPGoD">{i18n._(t`Distributions`)}</p>
                         </div>
@@ -512,11 +467,6 @@ export default function Invest() {
                               <TrendingUpIcon width="24" height="24" />
                             </div>
                             <p className="iTWuKL">6.00%</p>
-                            <div className="iXKSiJ">
-                              <span>
-                                <img className="ClucN" src="/static/media/tooltip_icon.091e1161.svg" alt="" />
-                              </span>
-                            </div>
                           </div>
                           <p className="dLPGoD">{i18n._(t`Annualized Rate`)}</p>
                         </div>

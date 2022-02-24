@@ -168,6 +168,7 @@ interface ConfirmationModalProps {
   pendingText: string
   pendingText2?: string
   currencyToAdd?: Currency | undefined
+  error?: string | undefined
 }
 
 const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
@@ -179,6 +180,7 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
   pendingText2,
   content,
   currencyToAdd,
+  error,
 }) => {
   const { chainId } = useActiveWeb3React()
 
@@ -187,7 +189,9 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
   // confirmation screen
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={90}>
-      {attemptingTxn ? (
+      {error ? (
+        <TransactionErrorContent onDismiss={onDismiss} message={error} />
+      ) : attemptingTxn ? (
         <ConfirmationPendingContent onDismiss={onDismiss} pendingText={pendingText} pendingText2={pendingText2} />
       ) : hash ? (
         <TransactionSubmittedContent

@@ -67,6 +67,17 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: ['https://polygon-rpc.com'], // ['https://matic-mainnet.chainstacklabs.com/'],
     blockExplorerUrls: ['https://polygonscan.com'],
   },
+  [ChainId.MATIC_TESTNET]: {
+    chainId: '0x13881',
+    chainName: 'Mumbai',
+    nativeCurrency: {
+      name: 'Matic',
+      symbol: 'MATIC',
+      decimals: 18,
+    },
+    rpcUrls: ['https://matic-mumbai.chainstacklabs.com'], // ['https://matic-mainnet.chainstacklabs.com/'],
+    blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
+  },
   [ChainId.HECO]: {
     chainId: '0x80',
     chainName: 'Heco',
@@ -214,6 +225,7 @@ export default function NetworkModal(): JSX.Element | null {
         {[
           // ChainId.MAINNET,
           ChainId.MATIC,
+          ChainId.MATIC_TESTNET,
           // ChainId.FANTOM,
           // ChainId.ARBITRUM,
           // ChainId.OKEX,

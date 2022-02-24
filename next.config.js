@@ -34,6 +34,7 @@ module.exports = withBundleAnalyzer(
         'raw.githubusercontent.com',
         'logos.covalenthq.com',
         'objectstorage.us-phoenix-1.oraclecloud.com',
+        'images.unsplash.com',
       ],
     },
     reactStrictMode: true,
@@ -169,6 +170,10 @@ module.exports = withBundleAnalyzer(
         {
           source: '/withdraw/interest/:token*',
           destination: '/withdraw/interest/:token*',
+        },
+        {
+          source: '/repay/:token*',
+          destination: '/repay/:token*',
         },
         {
           source: '/dashboard',
